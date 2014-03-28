@@ -1,16 +1,11 @@
-<<<<<<< HEAD
 html, body{
 	width:100%;
-=======
-html body{
->>>>>>> devjg
 	height:100%;
 	background-color:#000000;
 }
 #full{
 	width: 100%;
 }
-<<<<<<< HEAD
 #lginBtn{
 	width:15em;
 }
@@ -19,9 +14,4 @@ html body{
 }
 button, .button{
 	background-color:#555555;
-=======
-
-#loginBtn{
-	width:15em;
->>>>>>> devjg
 }
