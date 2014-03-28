@@ -1,16 +1,11 @@
-<<<<<<< HEAD
 html, body{
 	width:100%;
-=======
-html body{
 	height:100%;
->>>>>>> 18c682411f6e756c1a656c674533e14dfca7d9cb
 	background-color:#000000;
 }
 #full{
 	width: 100%;
 }
-<<<<<<< HEAD
 #lginBtn{
 	width:15em;
 }
@@ -19,9 +14,4 @@ html body{
 }
 button, .button{
 	background-color:#555555;
-=======
-
-#loginBtn{
-	width:15em;
->>>>>>> 18c682411f6e756c1a656c674533e14dfca7d9cb
 }
