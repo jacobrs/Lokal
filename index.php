@@ -17,25 +17,25 @@
 	<!--<script src="<?php echo $pathToRoot ?>js/modernizr.js" type="text/javascript" language="javascript"></script>-->
 </head>
 <body>
-	<div class="full width">
-		<br><br><br><br><br><br>
+	<div class="full width" id="lginBanner">
 		<form 	name = "login-form" 
 				style="padding-top:20px;padding-bottom:15px;background-color:#333333;" 
-				method="POST" action ="<?php echo $pathToRoot;?>srv/login.php">
+				method="POST" action ="<?php echo $pathToRoot;?>srv/login.php"
+				id="lginForm">
 			<div class="row">
-			    <div class="large-5 columns">
+			    <div class="large-6 columns">
 			     	<label style="color:#CCCCCC;">Username
 			        	<input id="username" autocomplete="off"
 			        	name="username" type="text" placeholder="Username"/>
 			      	</label>
 			    </div>
-			    <div class="large-5 columns">
+			    <div class="large-6 columns">
 			      	<label style="color:#CCCCCC;">Password
 			        	<input id="password" autocomplete="off"
 			        	name="psswd" type="password" placeholder="Password"/>
 			      	</label>
 			    </div>
-				<div class="large-2 columns" style="margin-top:22px; text-align:center;">
+				<div class="large-2 columns" style="margin-top:15px; text-align:center;">
 					<a href="#" onclick="document.forms['login-form'].submit();" style="width:15em;"
 						class="button tiny" id="loginBtn">Login</a>
 				</div>
