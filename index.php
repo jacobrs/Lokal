@@ -17,6 +17,7 @@
 	<!--<script src="<?php echo $pathToRoot ?>js/modernizr.js" type="text/javascript" language="javascript"></script>-->
 </head>
 <body>
+<<<<<<< HEAD
 	<div class="full width">
 		<br><br><br><br><br><br>
 		<form 	name = "login-form" 
@@ -64,6 +65,48 @@
 			</fieldset>
 			-->
 	</div>
+=======
+	<br><br><br><br><br><br><br>
+	<form name="login-form" style="padding-top:20px;padding-bottom:15px;background-color:#333333;">
+		<div class="row">
+		    <div class="large-6 columns" style = "max-width:62.5em;">
+		     	<label style="color:#CCCCCC;">Username / Email
+		        	<input id="username" autocomplete="off"
+		        	name="username" type="text" placeholder="Username"/>
+		      	</label>
+		    </div>
+		    <div class="large-5 columns">
+		      	<label style="color:#CCCCCC;">Password
+		        	<input id="password" autocomplete="off"
+		        	name="password" type="password" placeholder="Password"/>
+		      	</label>
+		    </div>
+			<div class="large-2 columns" style="margin-top:15px; text-align:center;" id = "loginBtn">
+				<a href="#" onclick="document.forms['login-form'].submit();"
+					class="button tiny" id="loginBtn">Login</a>
+			</div>
+		</div>
+		<!--
+		<fieldset>
+			<legend>Log-in</legend>
+			<div class="row">
+				<div class="small-6 columns">
+					<label> Username
+						<input type="text" placeholder="Username">
+					</label>
+				</div>
+				<div class="small-6 columns">
+					<label> Password
+						<input type="password" placeholder="Password">
+					</label>
+				</div>
+				<div class="small-2 columns">
+					<a href="#" class="button tiny" id="loginBtn"> Login </a>
+				</div>
+			</div>
+		</fieldset>-->
+	</form>
+>>>>>>> devjg
 </body>
 </html>
 <?php
