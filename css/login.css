@@ -2,7 +2,14 @@
 	width: 100%;
 }
 
-#loginBtn{
-	margin-top: 15px;
-	width:100%;
+#user{
+	min-width: 370px;
+}
+
+#pass{
+	min-width: 370px;
+}
+
+#lginBtn{
+	margin-left: 47%;
 }
