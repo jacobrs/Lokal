@@ -11,14 +11,18 @@ var badHappened = false;
 var superBadHappened = false;
 var goodHappened = false;
 
-function createCode(){
+function createUser(){
 	var email = $('#email').val();
 	var fname = $('#fname').val();
 	var lname = $('#lname').val();
+	var day = $('#day').val();
+	var month = $('#month').val();
+	var year = $('#year').val();
+	var gender = $('#gender').val();
 	var isValid = true;
 	
 	uniqueIdentifier++;
-	isValid = validateInfo(email, fname, lname);
+	isValid = validateInfo(email, fname, lname, day, month, gender); // Validate year on a later date
 	var start_time = new Date().getTime();
 	
 	if(isValid){
@@ -26,16 +30,20 @@ function createCode(){
 		$.ajax({
 			type: "POST",
 			cache: "false",
-			url:  pathToRoot+"srv/createCode.php",
+			url:  pathToRoot+"srv/createUser.php",
 			data:{
 				Email: email,
 				Fname: fname,
-				Lname: lname
+				Lname: lname,
+				Year: year,
+				Month: month,
+				Day: day,
+				Gender: gender
 			},
 			success: function(data){
 				data = JSON.parse(data);
-				notifyUser(true, data);
 				console.log(data);
+				notifyUser(true, data);
 			},
 			error: function(data){
 				notifyUser(false, "none");
@@ -48,10 +56,24 @@ function createCode(){
 	}
 }
 
-function validateInfo(email, fname, lname){
+function validateInfo(email, fname, lname, day, month, gender){
 	var pattEmail = new RegExp('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$');
 	var pattName = new RegExp('[a-zA-Z0-9àáâäãåaceèéêëìíîïlnòóôöõøùúûüÿızzñçcšÀÁÂÄÃÅACEÈÉÊËÌÍÎÏLNÒÓÔÖÕØÙÚÛÜŸİZZÑßÇŒÆCŠ?ğ ,.\'-/]+');
 	var bool = true;
+	var map = {
+		1: 31,
+		2: 29,
+		3: 31,
+		4: 30,
+		5: 31,
+		6: 30,
+		7: 31,
+		8: 31,
+		9: 30,
+		10: 31,
+		11: 30,
+		12: 31
+	};
 	
 	setEverythingToDefault();
 	
@@ -84,6 +106,16 @@ function validateInfo(email, fname, lname){
 			$("#lnameDiv").append('<small class = "error">Invalid Last Name</small>');
 		}
 		bool = false;
+	}
+	
+	if(typeof(month) != 'NULL'){
+		if(day > map[month] || typeof(day) == 'NULL'){
+			$("#day option:first").text("Error");
+			$("#day").val("32");
+			bool = false;
+		}else{
+			$("#day option:first").text("Day");
+		}
 	}
 	
 	if(!bool){
@@ -122,14 +154,19 @@ function setEverythingToDefault(){
 	}
 }
 
-function notifyUser(worked, code){
+function notifyUser(worked, data){
 	if(worked){
-		$("#infoField").after('<p style="color:#7CFC00; text-align:center">Successfully sent code('+uniqueIdentifier+')</p><br>'+
-		'<p style="color:#7CFC00; text-align:center">Code sent was: '+code['code']+'<br><p style="color:#7CFC00; text-align:center">To: '+
-		code['fname']+" "+code['lname']+'</p><br><p style="color:#7CFC00; text-align:center">E-mail: '+code['email']+'</p>');
+		if(data['error'] == 0){
+			$("#infoField").after('<p style="color:#7CFC00; text-align:center">Successfully added user('+uniqueIdentifier+')</p><br>'+
+			'<p style="color:#7CFC00; text-align:center">Name: '+ data['fname']+" "+data['lname']+'</p><br><p style="color:#7CFC00;'+ 
+			'text-align:center">E-mail: '+data['email']+'</p>');
+		}else if(data['error'] == 1){
+			$("#infoField").after('<p style="color:red; text-align:center">Email is already in use ('+uniqueIdentifier+')</p><br>');
+		}else if(data['error'] == 2){
+			$("#infoField").after('<p style="color:red; text-align:center">Someone with the same name already exists ('+uniqueIdentifier+')</p><br>');
+		}
 	}else{
 		superBadHappened = true;
-		$("#infoField").after('<p style="color:red; text-align:center">Something went wrong while try to create a code ('+uniqueIdentifier+')</p><br>'+
-		'<p style="color:red; text-align:center">Code sent was: '+code['code']);
+		$("#infoField").after('<p style="color:red; text-align:center">Something went wrong while try to create the user ('+uniqueIdentifier+')</p><br>');
 	}
 }

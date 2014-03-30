@@ -12,17 +12,21 @@
 	$code = "";
 	$codeChars = array_merge(range('A','Z'), range('a', 'z'), range(0,9));
 	shuffle($codeChars);
-	for($i = 0; $i < 15; $i++){
-		$code .= $codeChars[array_rand($codeChars)];
-	}
+	
+	$sql = "SELECT * FROM `Code` WHERE `Code` = '".$code."'";
+	$lokaldb->select_db('lokal');
+	$result = $datenbank->query($sql);
+	$numrows = $result->num_rows;
+	
+	
 	
 	$array = [
 		"email" => $email,
 		"fname" => $fname,
 		"lname" => $lname,
-		"code"  => $code
 	];
 	$data = json_encode($array);
 	
+	$lokaldb -> close();
 	echo $data;
 ?>
