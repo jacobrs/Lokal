@@ -1,9 +1,11 @@
 var pathToRoot = "http://localhost/lokal/";
 
 /*
-	Ajax code for creating a code
+	Ajax code for creating a user
 	Last editted by: Benjamin Barault
 	On: March 30th, 2014
+	
+	To-do: Comment all later on and make it bullet-proof
 */
 
 var uniqueIdentifier = 0;
