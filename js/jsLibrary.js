@@ -22,7 +22,7 @@ function createUser(){
 	var isValid = true;
 	
 	uniqueIdentifier++;
-	isValid = validateInfo(email, fname, lname, day, month, gender); // Validate year on a later date
+	isValid = validateInfo(email, fname, lname, day, month, gender, year);
 	var start_time = new Date().getTime();
 	
 	if(isValid){
@@ -56,7 +56,7 @@ function createUser(){
 	}
 }
 
-function validateInfo(email, fname, lname, day, month, gender){
+function validateInfo(email, fname, lname, day, month, gender, year){
 	var pattEmail = new RegExp('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$');
 	var pattName = new RegExp('[a-zA-Z0-9àáâäãåaceèéêëìíîïlnòóôöõøùúûüÿýzzñçcšžÀÁÂÄÃÅACEÈÉÊËÌÍÎÏLNÒÓÔÖÕØÙÚÛÜŸÝZZÑßÇŒÆCŠŽ?ð ,.\'-/]+');
 	var bool = true;
@@ -108,22 +108,53 @@ function validateInfo(email, fname, lname, day, month, gender){
 		bool = false;
 	}
 	
-	if(typeof(month) != 'NULL'){
-		if(day > map[month] || typeof(day) == 'NULL'){
+	if(typeof(day) === 'object'){
+		$("#day option:first").text("Error");
+		$("#day").val("32");
+		bool = false;
+	}else{
+		$("#day option:first").text("Day");
+	}
+	
+	if(typeof(month) !== 'object'){
+		if(day > map[month]){
 			$("#day option:first").text("Error");
 			$("#day").val("32");
 			bool = false;
 		}else{
 			$("#day option:first").text("Day");
 		}
+		$("#month option:first").text("Month");
+	}else{
+		$("#month option:first").text("Error");
+		$("#month").val("13");
+		bool = false;
+	}
+	
+	if(!(gender == 'M' || gender == 'F')){
+		$("#gender option:first").text("Error");
+		$("#gender").val("G");
+		bool = false;
+	}else{
+		$("#gender option:first").text("Gender");
+	}
+	
+	if(typeof(year) === 'object'){
+	 	var myYear = new Date().getFullYear() + 1;
+		$("#year option:first").text("Error");
+		$("#year").val(myYear);
+		bool = false;
+	}else{
+		$("#year option:first").text("Year");
 	}
 	
 	if(!bool){
-		$("#infoField").after('<p style="color:red; text-align:center">Code was not sent, make sure the e-mail is valid and that first/last name are not empty('+uniqueIdentifier+')</p>');
+		$("#infoField").after('<p style="color:red; text-align:center">User was not created, make sure everything is valid('+uniqueIdentifier+')</p>');
 		badHappened = true;
 	}else{
 		goodHappened = true;
 	}
+	
 	return bool;
 }
 
@@ -155,11 +186,16 @@ function setEverythingToDefault(){
 }
 
 function notifyUser(worked, data){
+	var genderMap = {
+		"M":"Male",
+		"F":"Female"
+	};
 	if(worked){
 		if(data['error'] == 0){
 			$("#infoField").after('<p style="color:#7CFC00; text-align:center">Successfully added user('+uniqueIdentifier+')</p><br>'+
 			'<p style="color:#7CFC00; text-align:center">Name: '+ data['fname']+" "+data['lname']+'</p><br><p style="color:#7CFC00;'+ 
-			'text-align:center">E-mail: '+data['email']+'</p>');
+			'text-align:center">E-mail: '+data['email']+'</p><br><p style="color:#7CFC00; text-align:center">Gender: '+genderMap[data['gender']]+
+			'</p><br><p style="color:#7CFC00; text-align:center">Date of Birth: '+data['DOB']);
 		}else if(data['error'] == 1){
 			$("#infoField").after('<p style="color:red; text-align:center">Email is already in use ('+uniqueIdentifier+')</p><br>');
 		}else if(data['error'] == 2){

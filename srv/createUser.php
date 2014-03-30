@@ -12,7 +12,7 @@
 	$day = $_POST['Day'];
 	$gender = $_POST['Gender'];
 	
-	$date = $year."-".$month."-".$year;
+	$date = $year."-".$month."-".$day;
 	
 	$sql = "SELECT * 
 	        FROM `Customers` 
@@ -40,14 +40,17 @@
 	if($error === 0){
 		$sql = "INSERT INTO `Customers`(`Email`, `DOB`, `FirstName`, `LastName`, `RestID`, `Gender`)
 				VALUES ('".$email."', '".$date."', '".$fname."', '".$lname."', 1, '".$gender."')";
+		$lokaldb->select_db('lokal');
+		$result = $lokaldb->query($sql);
 	}
 	
 	$array = [
-		"email" => $email,
-		"fname" => $fname,
-		"lname" => $lname,
-		"DOB"   => $date,
-		"error" => $error
+		"email"  => $email,
+		"fname"  => $fname,
+		"lname"  => $lname,
+		"DOB"    => $date,
+		"gender" => $gender,
+		"error"  => $error
 	];
 	$data = json_encode($array);
 	

@@ -68,7 +68,7 @@
 					  ?>
 					</select>
 					<select style="width: 100px" id="gender">
-					  <option selected disabled>Gender</option>
+					  <option selected disabled value="G">Gender</option>
 					  <option value="M">Male</option>
 					  <option value="F">Female</option>
 					</select>
