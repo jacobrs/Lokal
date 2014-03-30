@@ -20,8 +20,22 @@ html, body{
    margin-left: auto;
    margin-right: auto;
 }
+#searches{
+   width: 100%;
+   margin-left: auto;
+   margin-right: auto;
+}
+#results{
+   width: 80%;
+   margin-left: auto;
+   margin-right: auto;
+
+}
 .button:hover, button:focus, .button:hover, .button:focus{
 	background-color:#777777;
+}
+.small-1{
+	min-width: 67px;
 }
 button, .button{
 	background-color:#555555;
