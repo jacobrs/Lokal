@@ -3,7 +3,7 @@
 	error_reporting(E_ALL);
  	ini_set("display_errors", 1);
 	session_start();
-	require('./srv/connect.php');
+	require($pathToRoot.'srv/connect.php');
 ?>
 <html>
 <head>
@@ -14,9 +14,14 @@
 	<link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/main.css">
 	<script src="<?php echo $pathToRoot ?>js/jquery.js" type="text/javascript" language="javascript"></script>
 	<script src="<?php echo $pathToRoot ?>js/foundation.min.js" type="text/javascript" language="javascript"></script>
+	<script src="<?php echo $pathToRoot ?>js/homejs/load.js" type="text/javascript" language="javascript"></script>
 	<!--<script src="<?php //echo $pathToRoot ?>js/modernizr.js" type="text/javascript" language="javascript"></script>-->
 </head>
-<body>
+<body><br><br>
+	<div class="full" style="text-align:center;">
+		<img src="<?php echo $pathToRoot;?>./img/eltigre.png" style="height:200px;" height="200">
+	</div>
+	<br><br>
 	<div class="full width" id="lginBanner">
 		<form 	name = "login-form" 
 				style="padding-top:20px;padding-bottom:15px;background-color:#333333;" 
@@ -45,6 +50,6 @@
 </body>
 </html>
 <?php
-	global $lokaldb;
-	$lokaldb -> close();
+	// footer includes the database close
+	require($pathToRoot.'includes/footer.php');
 ?>

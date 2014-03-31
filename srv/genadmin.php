@@ -15,4 +15,6 @@
 			VALUES  ('".$user."', '".$hash."');";
 	var_dump($lokaldb->query($sql));
 
+	// footer includes the database close
+	require($pathToRoot.'includes/footer.php');
 ?>

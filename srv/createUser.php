@@ -55,4 +55,7 @@
 	$data = json_encode($array);
 	
 	echo $data;
+	
+	// footer includes the database close
+	require($pathToRoot.'includes/footer.php');
 ?>

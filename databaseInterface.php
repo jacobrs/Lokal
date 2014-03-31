@@ -62,3 +62,7 @@
 		</div>
 	</body>
 </html>
+<?php
+	// footer includes the database close
+	require($pathToRoot.'includes/footer.php');
+?>

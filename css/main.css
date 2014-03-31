@@ -4,8 +4,12 @@ html, body{
 	background-color:#000000;
 }
 #lginBanner{
-   position: absolute;
-   top: 40%;
+   position: relative;
+   left: 0;
+   width: 100%;
+}
+.full{
+   position: relative;
    left: 0;
    width: 100%;
 }
