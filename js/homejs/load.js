@@ -1,5 +1,8 @@
 $(document).ready(function (){
 	$('#lginBanner').hide();
-	$('#lginBanner').fadeIn('slow');
+	$('#clogo').hide();
+	$('#lginBanner').fadeIn('slow', function (){
+		$('#clogo').fadeIn('slow');
+	});
 	return true;
 });

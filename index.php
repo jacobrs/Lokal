@@ -18,8 +18,8 @@
 	<!--<script src="<?php //echo $pathToRoot ?>js/modernizr.js" type="text/javascript" language="javascript"></script>-->
 </head>
 <body><br><br>
-	<div class="full" style="text-align:center;">
-		<img src="<?php echo $pathToRoot;?>./img/eltigre.png" style="height:200px;" height="200">
+	<div class="full" style="text-align:center;" id="ccontainer">
+		<img id="clogo" src="<?php echo $pathToRoot;?>./img/eltigre.png" style="height:200px;" height="200">
 	</div>
 	<br><br>
 	<div class="full width" id="lginBanner">
