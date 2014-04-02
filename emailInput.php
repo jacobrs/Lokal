@@ -20,16 +20,16 @@
 			<fieldset id = "infoField">
 			<legend style="background-color:#000000; color:#FFFFFF">E-mail Info</legend>
 			<div class = "row">
-				<div class = "large-7 columns" id = "emailDiv">
-					<label style="color:#FFFFFF" id = "EmailLabel">E-mail
-					<input id="email" autocomplete="off"
-						name="email" type="text" placeholder="E-mail"/>
-					</label>
-				</div>
 				<div class = "large-7 columns" id = "fnameDiv">
 					<label style="color:#FFFFFF" id = "FnameLabel">First name
 					<input id="fname" autocomplete="off"
 						name="fname" type="text" placeholder="First name"/>
+					</label>
+				</div>
+				<div class = "large-7 columns" id = "emailDiv">
+					<label style="color:#FFFFFF" id = "EmailLabel">E-mail
+					<input id="email" autocomplete="off"
+						name="email" type="text" placeholder="E-mail"/>
 					</label>
 				</div>
 			</div>
