@@ -14,6 +14,7 @@ var superBadHappened = false;
 var goodHappened = false;
 
 function createUser(){
+	console.log("Fuck");
 	var email = $('#email').val();
 	var fname = $('#fname').val();
 	var lname = $('#lname').val();
@@ -45,9 +46,13 @@ function createUser(){
 			success: function(data){
 				data = JSON.parse(data);
 				console.log(data);
+				$('#infoField').after('<div class = "row"><fieldset id = "userResult"><legend style="background-color:#000000; color:#FFFFFF">User inputted #'+uniqueIdentifier+
+				'</legend><div class = "resultContainer"></div></fieldset></div>');
 				notifyUser(true, data);
 			},
 			error: function(data){
+			    $('#infoField').after('<div class = "row"><fieldset id = "userResult"><legend style="background-color:#000000; color:#FFFFFF">User inputted</legend>'+
+			     '<div class = "resultContainer"></div></fieldset></div>');
 				notifyUser(false, "none");
 			},
 			complete: function(){		
@@ -151,7 +156,7 @@ function validateInfo(email, fname, lname, day, month, gender, year){
 	}
 	
 	if(!bool){
-		$("#infoField").after('<p style="color:red; text-align:center">User was not created, make sure everything is valid('+uniqueIdentifier+')</p>');
+		$("#userResult").append('<p style="color:red; text-align:center">User was not created, make sure everything is valid</p>');
 		badHappened = true;
 	}else{
 		goodHappened = true;
@@ -180,13 +185,15 @@ function setEverythingToDefault(){
 	$("#lnameDiv").find("small").remove();
 	
 	if(goodHappened || badHappened || superBadHappened){
-		$("html").find("p").remove();
+		$("html").find("#userResult").remove();
 		goodHappened = false;
 		badHappened = false;
 		superBadHappened = false;
 	}
 }
 
+
+var appentToThis = ".resultContainer";
 function notifyUser(worked, data){
 	var genderMap = {
 		"M":"Male",
@@ -194,17 +201,17 @@ function notifyUser(worked, data){
 	};
 	if(worked){
 		if(data['error'] == 0){
-			$("#infoField").after('<p style="color:#7CFC00; text-align:center">Successfully added user('+uniqueIdentifier+')</p><br>'+
+			$(appentToThis).append('<p style="color:#7CFC00; text-align:center; text-decoration: underline; font-weight: bold">Successfully added user</p><br>'+
 			'<p style="color:#7CFC00; text-align:center">Name: '+ data['fname']+" "+data['lname']+'</p><br><p style="color:#7CFC00;'+ 
 			'text-align:center">E-mail: '+data['email']+'</p><br><p style="color:#7CFC00; text-align:center">Gender: '+genderMap[data['gender']]+
 			'</p><br><p style="color:#7CFC00; text-align:center">Date of Birth: '+data['DOB']);
 		}else if(data['error'] == 1){
-			$("#infoField").after('<p style="color:red; text-align:center">Email is already in use ('+uniqueIdentifier+')</p><br>');
+			$(appentToThis).append('<p style="color:red; text-align:center">Email is already in use</p><br>');
 		}else if(data['error'] == 2){
-			$("#infoField").after('<p style="color:red; text-align:center">Someone with the same name already exists ('+uniqueIdentifier+')</p><br>');
+			$(appentToThis).append('<p style="color:red; text-align:center">Someone with the same name already exists</p><br>');
 		}
 	}else{
 		superBadHappened = true;
-		$("#infoField").after('<p style="color:red; text-align:center">Something went wrong while try to create the user ('+uniqueIdentifier+')</p><br>');
+		$(appentToThis).append('<p style="color:red; text-align:center">Something went wrong while try to create the user</p><br>');
 	}
 }

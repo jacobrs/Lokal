@@ -10,7 +10,7 @@
 	<meta charset="utf-8">
 	<title>Log-in Page</title>
 	<link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/foundation.min.css">
-	<!--<link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/normalize.css">-->
+	<!--<link rel="stylesheet" type="text/css" href="<?php //echo $pathToRoot ?>css/normalize.css">-->
 	<link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/main.css">
 	<script src="<?php echo $pathToRoot ?>js/jquery.js" type="text/javascript" language="javascript"></script>
 	<script src="<?php echo $pathToRoot ?>js/foundation.min.js" type="text/javascript" language="javascript"></script>
