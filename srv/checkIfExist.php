@@ -19,7 +19,7 @@
 		$error = 1;
 	}
 	
-	$sql = "SELECT *
+	/*$sql = "SELECT *   // Uncomment this for name checking
 	        FROM `Customers`
 			WHERE `FirstName` = '".$fname."'
 			AND `LastName` = '".$lname."'";
@@ -29,7 +29,7 @@
 	
 	if($numrows > 0){
 		$error = 2;
-	}
+	}*/
 	
 	$array = [
 		"email"  => $email,

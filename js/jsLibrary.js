@@ -229,9 +229,9 @@ function notifyUser(worked, data){
 			' onclick = "enterEntry()" id = "btnEnter">Enter entry</div></div></div>');
 		}else if(data['error'] == 1){
 			$(appentToThis).append('<p class = "errors" style="text-align:center">Email is already in use</p>');
-		}else if(data['error'] == 2){
+		}/*else if(data['error'] == 2){  // Uncomment this for name checking
 			$(appentToThis).append('<p class = "errors" style="text-align:center">Someone with the same name already exists</p>');
-		}
+		}*/
 	}else{
 		superBadHappened = true;
 		$(appentToThis).append('<p class = "errors" style="text-align:center">Something went wrong while try to create the user</p><br>');
