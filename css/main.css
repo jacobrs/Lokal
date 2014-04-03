@@ -3,6 +3,9 @@ html, body{
 	height:100%;
 	background-color:#000000;
 }
+fieldset{
+	background: #585858;
+}
 #lginBanner{
    position: relative;
    left: 0;
@@ -14,6 +17,11 @@ html, body{
    width: 100%;
 }
 .resultContainer p{
+	text-align: left;
+	color: #FFFFFF;
+}
+#centerChoice{
+	margin-left: 10%;
 }
 #userResult{
 	margin-left: 20%;
@@ -46,6 +54,17 @@ html, body{
 }
 .button:hover, button:focus, .button:hover, .button:focus{
 	background-color:#777777;
+}
+#emailBtn:focus, #emailBtn:hover, #btnEnter:focus, #btnEnter:hover, #btnDelete:focus, #btnDelete:hover{
+	background-color:#404040;
+}
+#emailBtn, #btnEnter, #btnDelete{
+	background-color:#202020;
+}
+.errors{
+	text-align: center;
+	color: red;
+	font-weight: bold;
 }
 .small-1{
 	min-width: 67px;
