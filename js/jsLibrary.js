@@ -8,22 +8,33 @@ var pathToRoot = "http://localhost/lokal/";
 	To-do: Comment all later on and make it bullet-proof
 */
 
+var nextYear = new Date().getFullYear() + 1;
 var uniqueIdentifier = 0;
 var badHappened = false;
 var superBadHappened = false;
 var goodHappened = false;
+var errorDiv = "";
+var email = "";
+var fname = "";
+var lname = "";
+var day = "";
+var month = "";
+var year = "";
+var gender = "";
+var DOB = "";
+
 
 function createUser(){
-	console.log("Fuck");
-	var email = $('#email').val();
-	var fname = $('#fname').val();
-	var lname = $('#lname').val();
-	var day = $('#day').val();
-	var month = $('#month').val();
-	var year = $('#year').val();
-	var gender = $('#gender').val();
+	email = $('#email').val();
+	fname = $('#fname').val();
+	lname = $('#lname').val();
+	day = $('#day').val();
+	month = $('#month').val();
+	year = $('#year').val();
+	gender = $('#gender').val();
 	var isValid = true;
 	
+	$("html").find("#userResult").remove();
 	uniqueIdentifier++;
 	isValid = validateInfo(email, fname, lname, day, month, gender, year);
 	var start_time = new Date().getTime();
@@ -33,25 +44,20 @@ function createUser(){
 		$.ajax({
 			type: "POST",
 			cache: "false",
-			url:  pathToRoot+"srv/createUser.php",
+			url:  pathToRoot+"srv/checkIfExist.php",
 			data:{
 				Email: email,
 				Fname: fname,
-				Lname: lname,
-				Year: year,
-				Month: month,
-				Day: day,
-				Gender: gender
+				Lname: lname
 			},
 			success: function(data){
 				data = JSON.parse(data);
-				console.log(data);
-				$('#infoField').after('<div class = "row"><fieldset id = "userResult"><legend style="background-color:#000000; color:#FFFFFF">User inputted #'+uniqueIdentifier+
+				$('#infoField').after('<div class = "row"><fieldset id = "userResult"><legend style="background-color:#000000; color:#FFFFFF">User Info'+
 				'</legend><div class = "resultContainer"></div></fieldset></div>');
 				notifyUser(true, data);
 			},
 			error: function(data){
-			    $('#infoField').after('<div class = "row"><fieldset id = "userResult"><legend style="background-color:#000000; color:#FFFFFF">User inputted</legend>'+
+			    $('#infoField').after('<div class = "row"><fieldset id = "userResult"><legend style="background-color:#000000; color:#FFFFFF">Errors</legend>'+
 			     '<div class = "resultContainer"></div></fieldset></div>');
 				notifyUser(false, "none");
 			},
@@ -83,8 +89,10 @@ function validateInfo(email, fname, lname, day, month, gender, year){
 	};
 	
 	setEverythingToDefault();
+	$("#errorBox").remove();
 	
-	if(!pattEmail.test(email)){
+	if(!pattEmail.test(email) || email == ''){
+	    errorDiv += '<p class = "errors">E-mail is invalid</p>';
 		$('#EmailLabel').contents().first().replaceWith("Error");
 		$("#EmailLabel").attr('class', 'error');
 		$("#EmailLabel").css('color', 'red');
@@ -94,7 +102,8 @@ function validateInfo(email, fname, lname, day, month, gender, year){
 		}
 		bool = false;
 	}
-	if(!pattName.test(fname)){
+	if(!pattName.test(fname) || fname == ''){
+		errorDiv += '<p class = "errors">First name invalid</p>';
 		$('#FnameLabel').contents().first().replaceWith("Error");
 		$("#FnameLabel").attr('class', 'error');
 		$("#FnameLabel").css('color', 'red');
@@ -104,7 +113,8 @@ function validateInfo(email, fname, lname, day, month, gender, year){
 		}
 		bool = false;
 	}
-	if(!pattName.test(lname)){
+	if(!pattName.test(lname) || lname == ''){
+		errorDiv += '<p class = "errors">Last name invalid</p>';
 		$('#LnameLabel').contents().first().replaceWith("Error");
 		$("#LnameLabel").attr('class', 'error');
 		$("#LnameLabel").css('color', 'red');
@@ -115,7 +125,8 @@ function validateInfo(email, fname, lname, day, month, gender, year){
 		bool = false;
 	}
 	
-	if(typeof(day) === 'object'){
+	if(typeof(day) === 'object' || day == 32){
+		errorDiv += '<p class = "errors">Select a day</p>';
 		$("#day option:first").text("Error");
 		$("#day").val("32");
 		bool = false;
@@ -123,8 +134,9 @@ function validateInfo(email, fname, lname, day, month, gender, year){
 		$("#day option:first").text("Day");
 	}
 	
-	if(typeof(month) !== 'object'){
+	if(typeof(month) !== 'object' && month != 13){
 		if(day > map[month]){
+			errorDiv += '<p class = "errors">Day is too high for the month</p>';
 			$("#day option:first").text("Error");
 			$("#day").val("32");
 			bool = false;
@@ -133,12 +145,14 @@ function validateInfo(email, fname, lname, day, month, gender, year){
 		}
 		$("#month option:first").text("Month");
 	}else{
+		errorDiv += '<p class = "errors">Select a month</p>';
 		$("#month option:first").text("Error");
 		$("#month").val("13");
 		bool = false;
 	}
 	
 	if(!(gender == 'M' || gender == 'F')){
+		errorDiv += '<p class = "errors">Select a gender</p>';
 		$("#gender option:first").text("Error");
 		$("#gender").val("G");
 		bool = false;
@@ -146,8 +160,9 @@ function validateInfo(email, fname, lname, day, month, gender, year){
 		$("#gender option:first").text("Gender");
 	}
 	
-	if(typeof(year) === 'object'){
-	 	var myYear = new Date().getFullYear() + 1;
+	if(typeof(year) === 'object' || year == nextYear){
+		errorDiv += '<p class = "errors">Select a year</p>';
+	 	var myYear = nextYear;
 		$("#year option:first").text("Error");
 		$("#year").val(myYear);
 		bool = false;
@@ -156,8 +171,10 @@ function validateInfo(email, fname, lname, day, month, gender, year){
 	}
 	
 	if(!bool){
-		$("#userResult").append('<p style="color:red; text-align:center">User was not created, make sure everything is valid</p>');
+		$("#inputForm").after('<fieldset id = "errorBox" style = "width: 20%; margin-left:40%; min-width: 200px"><legend style="background-color:#000000; color:#FFFFFF">Errors</legend></fieldset>');
+		$("#errorBox").append(errorDiv);
 		badHappened = true;
+		resetVariables();
 	}else{
 		goodHappened = true;
 	}
@@ -194,6 +211,7 @@ function setEverythingToDefault(){
 
 
 var appentToThis = ".resultContainer";
+var hexColorP = "#000033";
 function notifyUser(worked, data){
 	var genderMap = {
 		"M":"Male",
@@ -201,17 +219,77 @@ function notifyUser(worked, data){
 	};
 	if(worked){
 		if(data['error'] == 0){
-			$(appentToThis).append('<p style="color:#7CFC00; text-align:center; text-decoration: underline; font-weight: bold">Successfully added user</p><br>'+
-			'<p style="color:#7CFC00; text-align:center">Name: '+ data['fname']+" "+data['lname']+'</p><br><p style="color:#7CFC00;'+ 
-			'text-align:center">E-mail: '+data['email']+'</p><br><p style="color:#7CFC00; text-align:center">Gender: '+genderMap[data['gender']]+
-			'</p><br><p style="color:#7CFC00; text-align:center">Date of Birth: '+data['DOB']);
+			$('#emailBtn').remove();
+			$(appentToThis).append('<p style="color:'+hexColorP+'; text-decoration: underline; font-weight: bold; text-align:center">User Details</p>'+
+			'<p style="color:'+hexColorP+';">Name:</p><p style="margin-top: -50px;text-align:center; width:100%">'+ data['fname']+" "+data['lname']+'</p><p style="'+
+			'color:'+hexColorP+';">E-mail:</p><p style="margin-top: -50px;text-align:center; width:100%">'+data['email']+'</p><p style="color:'+hexColorP+';">Gender:</p><p'+
+			' style="margin-top: -50px;text-align:center; width:100%">'+genderMap[gender]+'</p><p style="color:'+hexColorP+';">Date of Birth:</p><p style="text'+
+			'-align:center; margin-top: -50px; width:100%">'+year+'-'+month+'-'+day+'</p><div id = "centerChoice"><div class = "row" style="margin-top: 50px"><div class = "large-7 '+
+			'columns"><a class = "button medium" onclick = "removeEntry()" id="btnDelete">Delete entry</a></div><div class = "large-7 columns"><a class = "button medium"'+
+			' onclick = "enterEntry()" id = "btnEnter">Enter entry</div></div></div>');
 		}else if(data['error'] == 1){
-			$(appentToThis).append('<p style="color:red; text-align:center">Email is already in use</p><br>');
-		}else if(data['error'] == 2){
-			$(appentToThis).append('<p style="color:red; text-align:center">Someone with the same name already exists</p><br>');
-		}
+			$(appentToThis).append('<p class = "errors" style="text-align:center">Email is already in use</p>');
+		}/*else if(data['error'] == 2){  // Uncomment this for name checking
+			$(appentToThis).append('<p class = "errors" style="text-align:center">Someone with the same name already exists</p>');
+		}*/
 	}else{
 		superBadHappened = true;
-		$(appentToThis).append('<p style="color:red; text-align:center">Something went wrong while try to create the user</p><br>');
+		$(appentToThis).append('<p class = "errors" style="text-align:center">Something went wrong while try to create the user</p><br>');
 	}
+}
+
+function removeEntry(){
+	resetVariables();
+	$('#userResult').parent().remove();
+	$('#gender').parent().parent().after('<div class = "row"><div class = "large-4 large-offset-6 columns"><a onclick = "createUser();" style = "margin-top:15px;'+
+	' text-align:center;" class = "button medium" id = "emailBtn">Add User</div>');
+}
+
+function enterEntry(){
+	document.body.style.cursor = 'wait';
+		$.ajax({
+			type: "POST",
+			cache: "false",
+			url:  pathToRoot+"srv/createUser.php",
+			data:{
+				Email: email,
+				Fname: fname,
+				Lname: lname,
+				Day: day,
+				Month: month,
+				Year: year,
+				Gender: gender
+			},
+			success: function(data){
+				$("html").find("#userResult").parent().remove();
+				$("#inputForm").after('<div class = "row"><fieldset id = "userResult"><legend style="background-color:#000000; color:#FFFFFF">Result'+
+				'</legend><p style="color:#FFFFFF; text-decoration: underline; font-weight: bold; text-align:center">Twas Successful</p></fieldset></div>');
+				$('#gender').parent().parent().after('<div class = "row"><div class = "large-4 large-offset-6 columns"><a onclick = "createUser();" style = "margin-top:15px;'+
+				' text-align:center;" class = "button medium" id = "emailBtn">Add User</div>');
+			},
+			error: function(data){
+				$("html").find("#userResult").parent().remove();
+				$("#inputForm").after('<div class = "row"><fieldset id = "userResult"><legend style="background-color:#000000; color:#FFFFFF">Results'+
+				'</legend><p class = "errors" style="text-decoration: underline; font-weight: bold; text-align:center">Twas A Failure ):</p></fieldset></div>');
+				$('#gender').parent().parent().after('<div class = "row"><div class = "large-4 large-offset-6 columns"><a onclick = "createUser();" style = "margin-top:15px;'+
+				' text-align:center;" class = "button medium" id = "emailBtn">Add User</div>');
+			},
+			complete: function(){		
+				document.body.style.cursor = 'default';
+				console.log(new Date().getTime() - start_time);
+			}
+		});
+		resetVariables();
+}
+
+function resetVariables(){
+	errorDiv = "";
+	email = "";
+	fname = "";
+	lname = "";
+	day = "";
+	month = "";
+	year = "";
+	gender = "";
+	DOB = "";
 }
