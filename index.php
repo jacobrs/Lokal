@@ -1,9 +1,13 @@
 <?php
+	session_start();
 	$pathToRoot = './';
 	error_reporting(E_ALL);
  	ini_set("display_errors", 1);
-	session_start();
 	require($pathToRoot.'srv/connect.php');
+	if(isset($_SESSION["user"])){
+		header("location: ".$pathToRoot."/emailInput.php");
+		die();
+	}
 ?>
 <html>
 <head>
@@ -31,7 +35,7 @@
 			    <div class="large-6 columns">
 			     	<label style="color:#CCCCCC;">Username
 			        	<input id="username" autocomplete="off"
-			        	name="username" type="text" placeholder="Username"/>
+			        	name="usrnm" type="text" placeholder="Username"/>
 			      	</label>
 			    </div>
 			    <div class="large-6 columns">
