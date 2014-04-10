@@ -17,5 +17,4 @@
 	die();
 
 	require_once($pathToRoot."includes/footer.php");
->>>>>>> devjg
 ?>
