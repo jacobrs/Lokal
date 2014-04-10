@@ -3,6 +3,9 @@ html, body{
 	height:100%;
 	background-color:#000000;
 }
+fieldset{
+	background: #585858;
+}
 #lginBanner{
    position: relative;
    left: 0;
