@@ -7,23 +7,6 @@ var pathToRoot = "http://localhost/lokal/";
 	
 	To-do: Comment all later on and make it bullet-proof
 */
-
-var nextYear = new Date().getFullYear() + 1;
-var uniqueIdentifier = 0;
-var badHappened = false;
-var superBadHappened = false;
-var goodHappened = false;
-var errorDiv = "";
-var email = "";
-var fname = "";
-var lname = "";
-var day = "";
-var month = "";
-var year = "";
-var gender = "";
-var DOB = "";
-
-
 function createUser(){
 	email = $('#email').val();
 	fname = $('#fname').val();
@@ -92,7 +75,7 @@ function validateInfo(email, fname, lname, day, month, gender, year){
 	$("#errorBox").remove();
 	
 	if(!pattEmail.test(email) || email == ''){
-	    errorDiv += '<p class = "errors">E-mail is invalid</p>';
+	    //errorDiv += '<p class = "errors">E-mail is invalid</p>';
 		$('#EmailLabel').contents().first().replaceWith("Error");
 		$("#EmailLabel").attr('class', 'error');
 		$("#EmailLabel").css('color', 'red');
@@ -103,7 +86,7 @@ function validateInfo(email, fname, lname, day, month, gender, year){
 		bool = false;
 	}
 	if(!pattName.test(fname) || fname == ''){
-		errorDiv += '<p class = "errors">First name invalid</p>';
+		//errorDiv += '<p class = "errors">First name invalid</p>';
 		$('#FnameLabel').contents().first().replaceWith("Error");
 		$("#FnameLabel").attr('class', 'error');
 		$("#FnameLabel").css('color', 'red');
@@ -114,7 +97,7 @@ function validateInfo(email, fname, lname, day, month, gender, year){
 		bool = false;
 	}
 	if(!pattName.test(lname) || lname == ''){
-		errorDiv += '<p class = "errors">Last name invalid</p>';
+		//errorDiv += '<p class = "errors">Last name invalid</p>';
 		$('#LnameLabel').contents().first().replaceWith("Error");
 		$("#LnameLabel").attr('class', 'error');
 		$("#LnameLabel").css('color', 'red');
@@ -126,9 +109,12 @@ function validateInfo(email, fname, lname, day, month, gender, year){
 	}
 	
 	if(typeof(day) === 'object' || day == 32){
-		errorDiv += '<p class = "errors">Select a day</p>';
+		//errorDiv += '<p class = "errors">Select a day</p>';
 		$("#day option:first").text("Error");
 		$("#day").val("32");
+		if(!$("#day").find("small").length){
+			$("#day").after('<small class = "error" style="width:100px;">Invalid Day</small>');
+		}
 		bool = false;
 	}else{
 		$("#day option:first").text("Day");
@@ -136,43 +122,55 @@ function validateInfo(email, fname, lname, day, month, gender, year){
 	
 	if(typeof(month) !== 'object' && month != 13){
 		if(day > map[month]){
-			errorDiv += '<p class = "errors">Day is too high for the month</p>';
+			//errorDiv += '<p class = "errors">Day is too high for the month</p>';
 			$("#day option:first").text("Error");
 			$("#day").val("32");
+			if(!$("#day").find("small").length){
+				$("#day").after('<small class = "error" style="width:100px;">Invalid Day</small>');
+			}
 			bool = false;
 		}else{
 			$("#day option:first").text("Day");
 		}
 		$("#month option:first").text("Month");
 	}else{
-		errorDiv += '<p class = "errors">Select a month</p>';
+		//errorDiv += '<p class = "errors">Select a month</p>';
 		$("#month option:first").text("Error");
+		if(!$("#month").find("small").length){
+				$("#month").after('<small class = "error" style="width:100px;">Invalid Month</small>');
+		}
 		$("#month").val("13");
 		bool = false;
 	}
 	
 	if(!(gender == 'M' || gender == 'F')){
-		errorDiv += '<p class = "errors">Select a gender</p>';
+		//errorDiv += '<p class = "errors">Select a gender</p>';
 		$("#gender option:first").text("Error");
 		$("#gender").val("G");
+		if(!$("#gender").find("small").length){
+			$("#gender").after('<small class = "error" style="width:100px;">Invalid Gender</small>');
+		}
 		bool = false;
 	}else{
 		$("#gender option:first").text("Gender");
 	}
 	
 	if(typeof(year) === 'object' || year == nextYear){
-		errorDiv += '<p class = "errors">Select a year</p>';
+		//errorDiv += '<p class = "errors">Select a year</p>';
 	 	var myYear = nextYear;
 		$("#year option:first").text("Error");
 		$("#year").val(myYear);
+		if(!$("#year").find("small").length){
+			$("#year").after('<small class = "error" style="width:100px;">Invalid Year</small>');
+		}
 		bool = false;
 	}else{
 		$("#year option:first").text("Year");
 	}
 	
 	if(!bool){
-		$("#inputForm").after('<fieldset id = "errorBox" style = "width: 20%; margin-left:40%; min-width: 200px"><legend style="background-color:#000000; color:#FFFFFF">Errors</legend></fieldset>');
-		$("#errorBox").append(errorDiv);
+		//$("#inputForm").after('<fieldset id = "errorBox" style = "width: 20%; margin-left:40%; min-width: 200px"><legend style="background-color:#000000; color:#FFFFFF">Errors</legend></fieldset>');
+		//$("#errorBox").append(errorDiv);
 		badHappened = true;
 		resetVariables();
 	}else{
@@ -187,19 +185,18 @@ function setEverythingToDefault(){
 	$("#EmailLabel").attr('class', '');
 	$("#EmailLabel").css('color', 'white');
 	$("#email").attr('class', '');
-	$("#emailDiv").find("small").remove();
 	
 	$('#FnameLabel').contents().first().replaceWith("First Name");
 	$("#FnameLabel").attr('class', '');
 	$("#FnameLabel").css('color', 'white');
 	$("#fname").attr('class', '');
-	$("#fnameDiv").find("small").remove();
 	
 	$('#LnameLabel').contents().first().replaceWith("Last Name");
 	$("#LnameLabel").attr('class', '');
 	$("#LnameLabel").css('color', 'white');
 	$("#lname").attr('class', '');
-	$("#lnameDiv").find("small").remove();
+	
+	$("html").find("small").remove();
 	
 	if(goodHappened || badHappened || superBadHappened){
 		$("html").find("#userResult").remove();

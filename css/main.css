@@ -61,6 +61,10 @@ fieldset{
 #emailBtn, #btnEnter, #btnDelete{
 	background-color:#202020;
 }
+.dobDivs{
+	width: 100px;
+	margin-right: 6px;
+}
 .errors{
 	text-align: center;
 	color: red;

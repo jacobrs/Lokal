@@ -10,6 +10,22 @@
 		<link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/main.css">
 		<script src="<?php echo $pathToRoot ?>js/jquery.js" type="text/javascript" language="javascript"></script>
 		<script src="<?php echo $pathToRoot ?>js/foundation.min.js" type="text/javascript" language="javascript"></script>
+		<script>
+			var nextYear = new Date().getFullYear() + 1;
+			var uniqueIdentifier = 0;
+			var badHappened = false;
+			var superBadHappened = false;
+			var goodHappened = false;
+			var errorDiv = "";
+			var email = "";
+			var fname = "";
+			var lname = "";
+			var day = "";
+			var month = "";
+			var year = "";
+			var gender = "";
+			var DOB = "";
+		</script>
 		<script src="<?php echo $pathToRoot ?>js/jsLibrary.js" type="text/javascript" language="javascript"></script>
 		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
 	</head>
@@ -40,8 +56,8 @@
 						name="lname" type="text" placeholder="Last name"/>
 					</label>
 				</div>
-				<div class = "large-7 columns" id = "dobDiv" style="margin-top:12px">
-					<select style="width: 100px; margin-right:8px" id="day">
+				<div class = "large-2 columns large-push-1" style="margin-top:12px;">
+					<select name="day" id="day" class = "dobDivs">
 					  <option selected disabled value="32">Day</option>
 					  <?php
 						  for($i = 1; $i <= 31; $i++){
@@ -49,7 +65,9 @@
 						  }
 					  ?>
 					</select>
-					<select style="width: 100px; margin-right:8px" name="month" id="month">
+				</div>
+				<div class = "large-2 columns large-push-1" style="margin-top:12px;">
+					<select name="month" id="month" class = "dobDivs">
 					  <option selected disabled value = "13">Month</option>
 					  <?php
 						$months = array(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12);
@@ -58,7 +76,9 @@
 						}
 					  ?>
 					</select>
-					<select style="width: 100px; margin-right:8px" id="year">
+				</div>
+				<div class = "large-2 columns large-push-1" style="margin-top:12px;">
+					<select name="year" id="year" class = "dobDivs">
 					  <option selected disabled value = "<?php echo date("Y") + 1 ?>">Year</option>
 					  <?php
 						for($i = 0; $i <= 114; $i++){
@@ -67,7 +87,9 @@
 						}
 					  ?>
 					</select>
-					<select style="width: 100px" id="gender">
+				</div>
+				<div class = "large-2 columns large-push-1" style="margin-top:12px;">
+					<select name="gender" id="gender" class = "dobDivs">
 					  <option selected disabled value="G">Gender</option>
 					  <option value="M">Male</option>
 					  <option value="F">Female</option>
