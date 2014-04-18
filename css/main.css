@@ -9,12 +9,19 @@ fieldset{
 #lginBanner{
    position: relative;
    left: 0;
-   width: 100%;
+   width: 250px;
+}
+#infoField{
+	margin-top: 0px;
+	min-width: 50px;
 }
 .full{
    position: relative;
    left: 0;
    width: 100%;
+}
+.validateInfo{
+	font-size: 1.5em;
 }
 .resultContainer p{
 	text-align: left;
@@ -24,10 +31,11 @@ fieldset{
 	margin-left: 10%;
 }
 #userResult{
-	margin-left: 20%;
-	margin-top: 0px;
+	margin: 0px auto;
 	max-width: 500px;
-	min-width: 100px;
+	min-width: 250px; 
+    border-color:#585858;
+    border-style: solid;
 }
 #lginForm{
    margin-left: auto;
@@ -40,6 +48,8 @@ fieldset{
    margin-left: auto;
    margin-right: auto;
    margin-bottom: 0px;
+   width:80%;
+   min-width: 300px;
 }
 #searches{
    width: 100%;
@@ -55,24 +65,60 @@ fieldset{
 .button:hover, button:focus, .button:hover, .button:focus{
 	background-color:#777777;
 }
-#emailBtn:focus, #emailBtn:hover, #btnEnter:focus, #btnEnter:hover, #btnDelete:focus, #btnDelete:hover{
+#emailBtn:focus, #emailBtn:hover{
 	background-color:#404040;
 }
-#emailBtn, #btnEnter, #btnDelete{
+#emailBtn{
 	background-color:#202020;
 }
+#btnDelete:focus, #btnDelete:hover{
+	background-color:#880000;
+}
+#btnDelete{
+	background-color:#D00000;
+	width:100%;
+}
+#btnEnter{
+	background-color:#7FFF00;
+	width:100%;
+}
+#btnEnter:focus, #btnEnter:hover{
+	background-color:#659D32;
+}
+.emailInfo{
+	margin-bottom: 0px;
+	margin-left: 35px;
+	font-family:"fantBlippo", Georgia, sans-serif;
+	font-size: 1.3em;
+}
 .dobDivs{
-	width: 100px;
+	position: relative;
+	display: inline-block;
+	width: 100%;
 	margin-right: 6px;
 }
 .errors{
 	text-align: center;
 	color: red;
 	font-weight: bold;
+	margin-top: 10px;
 }
 .small-1{
 	min-width: 67px;
 }
 button, .button{
 	background-color:#555555;
+}
+.confirmHeader{
+	font-family:"fantBlippo", Georgia, sans-serif;
+	font-size:1.2em;
+	margin-bottom: 0px;
+}
+.acptDeny{
+	max-width: 500px;
+	min-width: 250px;
+	margin: 0px auto;
+}
+.confirmBtns{
+	width:50%;
 }

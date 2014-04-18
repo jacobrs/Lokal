@@ -25,6 +25,7 @@
 			var year = "";
 			var gender = "";
 			var DOB = "";
+			var errorboxmargin = 7;
 		</script>
 		<script src="<?php echo $pathToRoot ?>js/jsLibrary.js" type="text/javascript" language="javascript"></script>
 		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
@@ -33,30 +34,30 @@
 		<form 	name = "input-form" 
 				style="padding-top:20px;padding-bottom:15px;" 
 				id="inputForm">
+			<p class="emailInfo" style="background-color:#000000; color:#FFFFFF">E-mail Info</p>
 			<fieldset id = "infoField">
-			<legend style="background-color:#000000; color:#FFFFFF">E-mail Info</legend>
 			<div class = "row">
-				<div class = "large-7 columns" id = "fnameDiv">
+				<div class = "large-7 medium-7 columns" id = "fnameDiv">
 					<label style="color:#FFFFFF" id = "FnameLabel">First name
 					<input id="fname" autocomplete="off"
 						name="fname" type="text" placeholder="First name"/>
 					</label>
 				</div>
+				<div class = "large-7 medium-7 columns" id = "lnameDiv">
+					<label style="color:#FFFFFF" id = "LnameLabel">Last name
+					<input id="lname" autocomplete="off"
+						name="lname" type="text" placeholder="Last name"/>
+					</label>
+				</div>
+			</div>
+			<div class = "row">
 				<div class = "large-7 columns" id = "emailDiv">
 					<label style="color:#FFFFFF" id = "EmailLabel">E-mail
 					<input id="email" autocomplete="off"
 						name="email" type="text" placeholder="E-mail"/>
 					</label>
 				</div>
-			</div>
-			<div class = "row">
-				<div class = "large-7 columns" id = "lnameDiv">
-					<label style="color:#FFFFFF" id = "LnameLabel">Last name
-					<input id="lname" autocomplete="off"
-						name="lname" type="text" placeholder="Last name"/>
-					</label>
-				</div>
-				<div class = "large-2 columns large-push-1" style="margin-top:12px;">
+				<div class = "large-2 medium-5 small-5 large-push-1 columns" style="margin-top:12px;">
 					<select name="day" id="day" class = "dobDivs">
 					  <option selected disabled value="32">Day</option>
 					  <?php
@@ -66,7 +67,7 @@
 					  ?>
 					</select>
 				</div>
-				<div class = "large-2 columns large-push-1" style="margin-top:12px;">
+				<div class = "large-2 medium-5 small-5 large-push-1 columns" style="margin-top:12px;">
 					<select name="month" id="month" class = "dobDivs">
 					  <option selected disabled value = "13">Month</option>
 					  <?php
@@ -77,29 +78,9 @@
 					  ?>
 					</select>
 				</div>
-				<div class = "large-2 columns large-push-1" style="margin-top:12px;">
-					<select name="year" id="year" class = "dobDivs">
-					  <option selected disabled value = "<?php echo date("Y") + 1 ?>">Year</option>
-					  <?php
-						for($i = 0; $i <= 114; $i++){
-							$year = (date("Y") - $i);
-							echo "<option value='".$year."'>".$year."</option>";
-						}
-					  ?>
-					</select>
-				</div>
-				<div class = "large-2 columns large-push-1" style="margin-top:12px;">
-					<select name="gender" id="gender" class = "dobDivs">
-					  <option selected disabled value="G">Gender</option>
-					  <option value="M">Male</option>
-					  <option value="F">Female</option>
-					</select>
-				</div>
-			</div>
-			<div class = "row">
-				<div class = "large-4 large-offset-6 columns">
-					 <a onclick="createUser();" style="margin-top:15px; text-align:center;"
-						class="button medium" id="emailBtn">Add User</a>
+				<div class = "large-3 medium-5 small-5 columns">
+					 <a onclick="createUser();" style="margin-top:12px; text-align:center;"
+						class="button small expand" id="emailBtn">Add User</a>
 				</div>
 			</div>
 			</fieldset>
