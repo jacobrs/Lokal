@@ -64,5 +64,11 @@
 		);";
 	if($run)var_dump($lokaldb->query($sql));
 	// footer includes the database close
+	$sql = "DELIMITER $$
+			drop trigger if exists `trg_admin_priv` $$
+			create trigger `trg_admin_priv` after insert on `Restaurants`
+			FOR EACH ROW begin
+				insert into Privileges (`AdminID`, `RestID`) VALUES (1, NEW.RestID);
+			end$$"
 	require($pathToRoot.'includes/footer.php');
 ?>

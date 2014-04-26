@@ -5,6 +5,7 @@ class user{
 	private $fname;
 	private $email;
 	private $lname;
+	private $uid;
 	function __construct($uid){
 		global $lokaldb;
 		$sql = "SELECT * FROM Admins WHERE `AdminID` = '$uid'";
@@ -14,10 +15,14 @@ class user{
 			$this->fname    = $row["Fname"];
 			$this->lname    = $row["Lname"];
 			$this->email    = $row["Email"];
+			$this->uid 		= $uid;
 		}
 	}
-	public function get_fname(){
-		return $this->fname;
+	public function getName(){
+		return $this->fname." ".$this->lname;
+	}
+	public function getRestaurants(){
+		return $this->username;
 	}
 }
 
@@ -36,7 +41,7 @@ function validate_user($uname, $psswd){
 		}
 	}
 	if($valid){
-		$_SESSION["user"] = new user($uname);
+		$_SESSION["user"] = new user($dbid);
 		$_SESSION["user"] = serialize($_SESSION["user"]);
 	}
 	return $valid;

@@ -1,15 +1,12 @@
 <?php
+	session_start();
 	$pathToRoot = './';
+	require($pathToRoot.'srv/common.php');
 	require($pathToRoot.'srv/connect.php');
+	$title = 'Input Info';
 ?>
 <html>
 	<head>
-		<meta charset="utf-8">
-		<title>Input Info</title>
-		<link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/foundation.min.css">
-		<link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/main.css">
-		<script src="<?php echo $pathToRoot ?>js/jquery.js" type="text/javascript" language="javascript"></script>
-		<script src="<?php echo $pathToRoot ?>js/foundation.min.js" type="text/javascript" language="javascript"></script>
 		<script>
 			var nextYear = new Date().getFullYear() + 1;
 			var uniqueIdentifier = 0;
@@ -27,14 +24,11 @@
 			var DOB = "";
 			var errorboxmargin = 7;
 		</script>
-		<script src="<?php echo $pathToRoot ?>js/jsLibrary.js" type="text/javascript" language="javascript"></script>
-		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
-	</head>
-	<body>
+		<?php require_once($pathToRoot.'includes/header.php');?>
 		<form 	name = "input-form" 
 				style="padding-top:20px;padding-bottom:15px;" 
 				id="inputForm">
-			<p class="emailInfo" style="background-color:#000000; color:#FFFFFF">E-mail Info</p>
+			<p class="emailInfo" style="background-color:#000000; color:#FFFFFF">Insert Customer</p>
 			<fieldset id = "infoField">
 			<div class = "row">
 				<div class = "large-7 medium-7 columns" id = "fnameDiv">
@@ -85,8 +79,6 @@
 			</div>
 			</fieldset>
 		</form>
-	</body>
-</html>
 <?php
 	// footer includes the database close
 	require($pathToRoot.'includes/footer.php');

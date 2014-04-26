@@ -6,10 +6,13 @@ html, body{
 fieldset{
 	background: #585858;
 }
+#ccontainer{
+   height:200px;
+}
 #lginBanner{
    position: relative;
    left: 0;
-   width: 250px;
+   width: 100%;
 }
 #infoField{
 	margin-top: 0px;

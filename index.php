@@ -1,8 +1,6 @@
 <?php
 	session_start();
 	$pathToRoot = './';
-	error_reporting(E_ALL);
- 	ini_set("display_errors", 1);
 	require($pathToRoot.'srv/connect.php');
 	if(isset($_SESSION["user"])){
 		header("location: ".$pathToRoot."/emailInput.php");
