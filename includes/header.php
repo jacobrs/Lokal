@@ -5,6 +5,8 @@
 ?>
     <meta charset="utf-8">
     <title><?php echo $title?></title>
+	<script src="<?php echo $pathToRoot ?>js/vendor/jquery.js" type="text/javascript" language="javascript"></script>
+	<script src="<?php echo $pathToRoot ?>js/foundation.min.js" type="text/javascript" language="javascript"></script>
     <link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/normalize.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/foundation.min.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/main.css">
@@ -47,7 +49,7 @@
       <li class="active"><a href="#">Insert Customer</a></li>
     </ul>
     <ul class="right">
-      <li class="active"><a href="#">Search Code</a></li>
+      <li class="active"><a href="<?php echo $pathToRoot."databaseInterface.php"; ?>">Search Code</a></li>
     </ul>
   </section>
 </nav>

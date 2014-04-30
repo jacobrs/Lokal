@@ -29,10 +29,12 @@ function createUser(){
 			},
 			success: function(data){;
 				data = JSON.parse(data);
+				validEntry = true;
 				notifyUser(true, data);
 			},
 			error: function(data){
 				notifyUser(false, "none");
+				validEntry = false;
 			},
 			complete: function(){		
 				document.body.style.cursor = 'default';
@@ -43,7 +45,7 @@ function createUser(){
 }
 
 function validateInfo(email, fname, lname, day, month){
-	var pattEmail = new RegExp('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$');
+	var pattEmail = new RegExp('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$');
 	var pattName = new RegExp('[a-zA-Z0-9‡·‚‰„ÂaceËÈÍÎÏÌÓÔlnÚÛÙˆı¯˘˙˚¸ˇ˝zzÒÁcöû¿¡¬ƒ√≈ACE»… ÀÃÕŒœLN“”‘÷’ÿŸ⁄€‹ü›ZZ—ﬂ«å∆Cäé? ,.\'-/]+');
 	var bool = true;
 	var map = {
@@ -62,7 +64,7 @@ function validateInfo(email, fname, lname, day, month){
 	};
 	
 	setEverythingToDefault();
-	
+
 	if(!pattEmail.test(email) || email == ''){
 		$("#EmailLabel").removeClass().addClass('error');
 		$("#EmailLabel").css('color', 'red');
@@ -147,11 +149,9 @@ function setEverythingToDefault(){
 	}
 }
 
-
-var appentToThis = ".resultContainer";
 var hexColorP = "#000033";
 function notifyUser(worked, data){
-    console.log(data);
+    //console.log(data);
 	if(worked){
 		if(data['error'] == 0){
 			month = '0'+month;
@@ -162,32 +162,35 @@ function notifyUser(worked, data){
 			$('#emailBtn').parent().remove();
 			$('#month').parent().removeClass().addClass("large-3 medium-7 small-7 columns");
 			$('#day').parent().removeClass().addClass("large-3 medium-7 small-7 large-push-1 columns columns");
-			$('#infoField').after('<div class = "row infoContainer"><fieldset id="userResult"><div class = "resultContainer"></div></fieldset></div>');
-			$('#infoField').after('<p class="confirmHeader" style="background-color:#000000; color:#FFFFFF; text-align:center">Confirm Insert</p>');
-			$(appentToThis).append('<p class="validateInfo" style="float: left">'+fname+' '+lname+'</p><p class="validateInfo" style="float:right">'+month+
+			$('#dynamicModal').append('<p class="confirmHeader" style="background-color:#000000; color:#FFFFFF; text-align:center">Confirm Insert</p>');
+			$('#dynamicModal').append('<p class="validateInfo" style="float: left">'+fname+' '+lname+'</p><p class="validateInfo" style="float:right">'+month+
 			'/'+day+' (MM/DD)</p><p class="validateInfo" style="text-align:center; clear:both">'+data['email']+'</p>');
-			$('#userResult').after('<ul class="button-group acptDeny"><li class="confirmBtns"><a class = "button medium" onclick = "removeEntry()" id="btnDelete">Cancel</a></li></div>'+
+			$('#dynamicModal').append('<ul class="button-group acptDeny"><li class="confirmBtns"><a class = "button medium" onclick = "removeEntry()" id="btnDelete">Cancel</a></li></div>'+
 			'<li class="confirmBtns"><a class = "button medium" onclick = "enterEntry()" id = "btnEnter">Confirm</a></li></ul>');
+			$('#dynamicModal').foundation('reveal', 'open');
 		}else if(data['error'] == 1){
 			// EMAIL ALREADY IN USE
+			$('#e-mailModal').foundation('reveal', 'open');
 		}
 	}else{
 		superBadHappened = true;
 		// SOMETHING BAD HAPPENED WHILE INPUTTING USER
+		$('#errorModal').foundation('reveal', 'open');
 	}
 }
 
 function removeEntry(){
 	resetVariables();
-	$(".infoContainer").remove();
+	$('#dynamicModal').foundation('reveal', 'close');
 	$('#month').parent().removeClass().addClass("large-2 medium-5 small-5 large-push-1 columns");
 	$('#day').parent().removeClass().addClass("large-2 medium-5 small-5 large-push-1 columns");
-	$('#month').parent().after('<div class = "large-3 medium-5 small-5 columns"><a onclick = "createUser();" style = "margin-top:15px;'+
+	$('#month').parent().after('<div class = "large-3 medium-5 small-5 columns"><a onclick = "createUser();" style = "margin-top:12px;'+
 	' text-align:center;" class = "button small expand" id = "emailBtn">Add User</a></div>');
-	$('.confirmHeader').remove();
+	$('#dynamicModal').empty();
 }
 
 function enterEntry(){
+	if(validEntry){
 	document.body.style.cursor = 'wait';
 		$.ajax({
 			type: "POST",
@@ -201,25 +204,21 @@ function enterEntry(){
 				Month: month
 			},
 			success: function(data){
-				$('#month').parent().removeClass().addClass("large-2 medium-5 small-5 large-push-1 columns");
-				$('#day').parent().removeClass().addClass("large-2 medium-5 small-5 large-push-1 columns");
-				$('#month').parent().after('<div class = "large-3 medium-5 small-5 columns"><a onclick = "createUser();" style = "margin-top:15px;'+
-				' text-align:center;" class = "button small expand" id = "emailBtn">Add User</a></div>');
+				$('#dynamicModal').foundation('reveal', 'close');
+				$('#successModal').foundation('reveal', 'open');
 			},
 			error: function(data){
-				$('#month').parent().removeClass().addClass("large-2 medium-5 small-5 large-push-1 columns");
-				$('#day').parent().removeClass().addClass("large-2 medium-5 small-5 large-push-1 columns");
-				$('#month').parent().after('<div class = "large-3 medium-5 small-5 columns"><a onclick = "createUser();" style = "margin-top:15px;'+
-				' text-align:center;" class = "button small expand" id = "emailBtn">Add User</a></div>');
+				$('#dynamicModal').foundation('reveal', 'close');
+				$('#errorModal').foundation('reveal', 'open');
 			},
 			complete: function(){		
 				document.body.style.cursor = 'default';
 				console.log(new Date().getTime() - start_time);
 			}
 		});
-		$('.confirmHeader').remove();
-		$(".infoContainer").remove();
-		resetVariables();
+	}
+	
+	validEntry = false;
 }
 
 function resetVariables(){
@@ -233,3 +232,14 @@ function resetVariables(){
 	gender = "";
 	DOB = "";
 }
+
+$(document).on('close', '[data-reveal]', function (e) {
+	if(e.target.id == "dynamicModal"){
+		resetVariables();
+		$('#month').parent().removeClass().addClass("large-2 medium-5 small-5 large-push-1 columns");
+		$('#day').parent().removeClass().addClass("large-2 medium-5 small-5 large-push-1 columns");
+		$('#month').parent().after('<div class = "large-3 medium-5 small-5 columns"><a onclick = "createUser();" style = "margin-top:12px;'+
+		' text-align:center;" class = "button small expand" id = "emailBtn">Add User</a></div>');
+		$('#dynamicModal').empty();
+	}
+});

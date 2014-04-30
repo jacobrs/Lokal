@@ -23,6 +23,7 @@
 			var gender = "";
 			var DOB = "";
 			var errorboxmargin = 7;
+			var validEntry = false;
 		</script>
 		<?php require_once($pathToRoot.'includes/header.php');?>
 		<form 	name = "input-form" 
@@ -79,6 +80,18 @@
 			</div>
 			</fieldset>
 		</form>
+		<div id="dynamicModal" class="reveal-modal" data-reveal>
+			<!-- JAVASCRIPT will fill this div -->
+		</div>
+		<div id="e-mailModal" class="reveal-modal" data-reveal>
+			<h2>E-mail is already in use</h2>
+		</div>
+		<div id="errorModal" class="reveal-modal" data-reveal>
+			<h2>Something went wrong with the operation, make sure you have an internet connection</h2>
+		</div>
+		<div id="successModal" class="reveal-modal" data-reveal>
+			<h2>Successfully entered user</h2>
+		</div>
 <?php
 	// footer includes the database close
 	require($pathToRoot.'includes/footer.php');
