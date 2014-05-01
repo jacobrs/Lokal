@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	$pathToRoot = './../';
+	$pathToRoot = '../';
 	session_destroy();
 	header("location: $pathToRoot");
 ?>

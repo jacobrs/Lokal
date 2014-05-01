@@ -1,6 +1,7 @@
 <?php
 
-	//Insert super admin script
+	// Insert super admin script
+	// PS HAS TO BE RUN ON CLEAN DATABASE
 
 	session_start();
 	$user 	= "Emilia";
@@ -23,8 +24,10 @@
 	$res = $lokaldb->query($sql);
 	$id = 1;
 	if($id != 0){
-		$sql = "INSERT INTO Restaurants (RestName)
-			VALUES  ('".$restn."');";
+		$sql = "INSERT INTO Restaurants (RestName) VALUES  ('".$restn."');";
+		$res = $lokaldb->query($sql);
+		$sql = "INSERT INTO Privileges (AdminID, RestID) VALUES (1,1)";
+		$res = $lokaldb->query($sql);
 	}
 
 	// footer includes the database close

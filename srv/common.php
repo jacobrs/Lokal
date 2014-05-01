@@ -26,6 +26,21 @@ class user{
 	}
 }
 
+class restaurant{
+	private $name;
+	private $id;
+	function __construct($name, $id){
+		$this->name = $name;
+		$this->id   = $id;
+	}
+	public function getId(){
+		return $this->id;
+	}
+	public function getName(){
+		return $this->name;
+	}
+}
+
 function validate_user($uname, $psswd){
 	global $lokaldb;
 	$sql = "SELECT * FROM Admins WHERE `Username` = '".$uname."'";
@@ -43,6 +58,14 @@ function validate_user($uname, $psswd){
 	if($valid){
 		$_SESSION["user"] = new user($dbid);
 		$_SESSION["user"] = serialize($_SESSION["user"]);
+		$sql = "SELECT r.`RestID`, `RestName` FROM `Restaurants` r JOIN `Privileges` p ON r.`RestID` = p.`RestID` WHERE p.`AdminID` = '".$dbid."'";
+		$res = $lokaldb->query($sql);
+		while(($row = $res->fetch_assoc()) !== null){
+			$restid = $row["RestID"];
+			$restname = $row["RestName"];
+		}
+		$_SESSION["Restaurant"] = new restaurant($restname, $restid);
+		$_SESSION["Restaurant"] = serialize($_SESSION["Restaurant"]);
 	}
 	return $valid;
 }

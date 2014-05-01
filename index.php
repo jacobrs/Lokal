@@ -3,8 +3,8 @@
 	$pathToRoot = './';
 	require($pathToRoot.'srv/connect.php');
 	if(isset($_SESSION["user"])){
-		header("location: ".$pathToRoot."/emailInput.php");
-		die();
+		header("location: ".$pathToRoot."emailInput.php");
+		exit();
 	}
 ?>
 <html>
@@ -49,6 +49,15 @@
 			</div>
 		</form>
 	</div>
+	<script type="text/JavaScript" language="JavaScript">
+			$('input').keypress(function(e) {
+		        console.log("Enter Key Pressed");
+		        if(e.which == 13) {
+		            jQuery(this).blur();
+		            jQuery('#loginBtn').focus().click();
+		        }
+		    });
+		</script>
 </body>
 </html>
 <?php

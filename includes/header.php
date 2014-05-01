@@ -2,6 +2,7 @@
   error_reporting(E_ALL);
   ini_set("display_errors", 1);
   $loggedUser = unserialize($_SESSION['user']);
+  $restaurant = unserialize($_SESSION['Restaurant']);
 ?>
     <meta charset="utf-8">
     <title><?php echo $title?></title>
@@ -24,11 +25,10 @@
     <li class="toggle-topbar menu-icon"><a href="#">Menu</a></li>
   </ul>
   <section class="top-bar-section">
-
     <!-- Right Nav Section -->
     <ul class="right">
       <li class="divider hide-for-small"></li>
-      <li class="has-dropdown"><a href="#">Menu</a>
+      <li class="has-dropdown"><a href="#">Menu and Management</a>
         <ul class="dropdown"><li class="title back js-generated"></li>
           <li><label>Restaurants</label></li>
           <li class="has-dropdown"><a href="#">Restaurants</a>
@@ -46,9 +46,11 @@
       </li>
     </ul>
     <ul class="right">
+      <li class="divider hide-for-small"></li>
       <li class="active"><a href="<?php echo $pathToRoot."emailInput.php"; ?>">Insert Customer</a></li>
     </ul>
     <ul class="right">
+      <li class="divider hide-for-small"></li>
       <li class="active"><a href="<?php echo $pathToRoot."databaseInterface.php"; ?>">Search Code</a></li>
     </ul>
   </section>
