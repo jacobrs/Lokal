@@ -3,6 +3,8 @@
 	$pathToRoot = './';
 	require($pathToRoot.'srv/common.php');
 	require($pathToRoot.'srv/connect.php');
+	if(!alive())
+	  header("location: ".$pathToRoot."srv/logout.php");
 	$title = 'Search Code';
 ?>
 

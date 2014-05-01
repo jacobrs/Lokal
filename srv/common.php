@@ -21,6 +21,9 @@ class user{
 	public function getName(){
 		return $this->fname." ".$this->lname;
 	}
+	public function getUid(){
+		return $this->uid;
+	}
 	public function getRestaurants(){
 		return $this->username;
 	}
@@ -68,6 +71,25 @@ function validate_user($uname, $psswd){
 		$_SESSION["Restaurant"] = serialize($_SESSION["Restaurant"]);
 	}
 	return $valid;
+}
+
+function alive(){
+	if(isset($_SESSION['user'])){
+		global $lokaldb;
+		$uid = unserialize($_SESSION['user'])->getUid();
+		$stmt = $lokaldb->prepare("SELECT `AdminID` FROM `Admins` WHERE `AdminID` = ?");
+		$stmt->bind_param('i', $int);
+		$res = $stmt->execute();
+		$stmt->bind_result($res);
+		//die($res);
+		if($res > 0)
+			return true;
+	}
+	return false;
+}
+
+function add_restaurant($name){
+
 }
 
 ?>

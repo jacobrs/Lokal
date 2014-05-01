@@ -41,6 +41,10 @@
           </li>
           <li class="divider"></li>
           <li><label>Settings</label></li>
+          <li><a href="<?php echo $pathToRoot.'settings.php';?>">Manage</a></li>
+          <?php if($loggedUser->getUid() == 1){?>
+          <li><a href="<?php echo $pathToRoot.'addrest.php'; ?>">Add Restaurant</a></li>
+          <?php } ?>
           <li><a href="<?php echo $pathToRoot.'srv/logout.php';?>">Logout</a></li>
         </ul>
       </li>

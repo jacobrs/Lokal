@@ -1,8 +1,12 @@
 <?php
 	session_start();
+	error_reporting(E_ALL);
+    ini_set("display_errors", 1);
 	$pathToRoot = './';
 	require($pathToRoot.'srv/common.php');
 	require($pathToRoot.'srv/connect.php');
+	if(!alive())
+	  header("location: ".$pathToRoot."srv/logout.php");
 	$title = 'Input Info';
 ?>
 <html>
