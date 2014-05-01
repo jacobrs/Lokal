@@ -180,18 +180,13 @@ function notifyUser(worked, data){
 }
 
 function removeEntry(){
-	resetVariables();
 	$('#dynamicModal').foundation('reveal', 'close');
-	$('#month').parent().removeClass().addClass("large-2 medium-5 small-5 large-push-1 columns");
-	$('#day').parent().removeClass().addClass("large-2 medium-5 small-5 large-push-1 columns");
-	$('#month').parent().after('<div class = "large-3 medium-5 small-5 columns"><a onclick = "createUser();" style = "margin-top:12px;'+
-	' text-align:center;" class = "button small expand" id = "emailBtn">Add User</a></div>');
-	$('#dynamicModal').empty();
 }
 
 function enterEntry(){
 	if(validEntry){
-	document.body.style.cursor = 'wait';
+		document.body.style.cursor = 'wait';
+		var start_time = new Date().getTime();
 		$.ajax({
 			type: "POST",
 			cache: "false",
@@ -204,12 +199,20 @@ function enterEntry(){
 				Month: month
 			},
 			success: function(data){
-				$('#dynamicModal').foundation('reveal', 'close');
-				$('#successModal').foundation('reveal', 'open');
+				$('#dynamicModal').empty();
+				$('#dynamicModal').append('<h2 style="text-align: center;">Successfully entered user</h2>'+
+				'<div style="text-align: center;">'+
+				'<a onclick="removeModal(\'dynamicModal\');" style="text-align:center; margin: 0px auto; width: 200px;"'+
+				'class="button small expand" id="successBtn">Ok</a>'+
+				'</div>');
 			},
 			error: function(data){
-				$('#dynamicModal').foundation('reveal', 'close');
-				$('#errorModal').foundation('reveal', 'open');
+				$('#dynamicModal').empty();
+				$('#dynamicModal').append('<h2>Something went wrong with the operation, make sure you have an internet connection</h2>'+
+				'<div style="text-align: center;">'+
+				'<a onclick="removeModal(\'dynamicModal\');" style="text-align:center; margin: 0px auto; width: 200px;"'+
+				'class="button small expand" id="errorBtn">Ok</a>'+
+				'</div>');
 			},
 			complete: function(){		
 				document.body.style.cursor = 'default';
@@ -243,3 +246,7 @@ $(document).on('close', '[data-reveal]', function (e) {
 		$('#dynamicModal').empty();
 	}
 });
+
+function removeModal(modal){
+	$('#'+modal).foundation('reveal', 'close');
+}

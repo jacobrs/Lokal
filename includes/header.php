@@ -46,7 +46,7 @@
       </li>
     </ul>
     <ul class="right">
-      <li class="active"><a href="#">Insert Customer</a></li>
+      <li class="active"><a href="<?php echo $pathToRoot."emailInput.php"; ?>">Insert Customer</a></li>
     </ul>
     <ul class="right">
       <li class="active"><a href="<?php echo $pathToRoot."databaseInterface.php"; ?>">Search Code</a></li>

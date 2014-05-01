@@ -84,13 +84,11 @@
 			<!-- JAVASCRIPT will fill this div -->
 		</div>
 		<div id="e-mailModal" class="reveal-modal" data-reveal>
-			<h2>E-mail is already in use</h2>
-		</div>
-		<div id="errorModal" class="reveal-modal" data-reveal>
-			<h2>Something went wrong with the operation, make sure you have an internet connection</h2>
-		</div>
-		<div id="successModal" class="reveal-modal" data-reveal>
-			<h2>Successfully entered user</h2>
+			<h2 style="text-align: center;">E-mail is already in use</h2>
+			<div style="text-align: center;">
+				<a onclick="removeModal('e-mailModal');" style="text-align:center; margin: 0px auto; width: 200px;"
+				class="button small expand" id="successBtn">Ok</a>
+			</div>
 		</div>
 <?php
 	// footer includes the database close
