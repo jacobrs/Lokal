@@ -1,4 +1,4 @@
-var pathToRoot = "http://localhost/lokal/";
+var pathToRoot = window.pathToRoot;
 
 /*
 	Ajax code for creating a user

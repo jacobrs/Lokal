@@ -12,6 +12,7 @@
 <html>
 	<head>
 		<script>
+			window.pathToRoot = "<?php echo $pathToRoot;?>";
 			var nextYear = new Date().getFullYear() + 1;
 			var uniqueIdentifier = 0;
 			var badHappened = false;
@@ -84,13 +85,13 @@
 			</div>
 			</fieldset>
 		</form>
-		<div id="dynamicModal" class="reveal-modal medium" data-reveal style="background-color:#333; top: 6em">
+		<div id="dynamicModal" class="reveal-modal medium" data-reveal style="color:#FFFFFF; background-color:#333; top: 6em">
 			<!-- JAVASCRIPT will fill this div -->
 		</div>
-		<div id="e-mailModal" class="reveal-modal medium" data-reveal style="background-color:#333; top: 6em">
+		<div id="e-mailModal" class="reveal-modal medium" data-reveal style="color:#FFFFFF; background-color:#333; top: 6em">
 			<h2 style="text-align: center;">E-mail is already in use</h2>
 			<div style="text-align: center;">
-				<a onclick="removeModal('e-mailModal');" style="text-align:center; margin: 0px auto; width: 200px;"
+				<a onclick="removeModal('e-mailModal');" style="color:#FFFFFF; text-align:center; margin: 0px auto; width: 200px;"
 				class="button small expand" id="successBtn">Ok</a>
 			</div>
 		</div>
