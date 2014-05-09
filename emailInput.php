@@ -33,7 +33,7 @@
 		<form 	name = "input-form" 
 				style="padding-top:20px;padding-bottom:15px;" 
 				id="inputForm">
-			<p class="emailInfo" style="background-color:#000000; color:#FFFFFF">Insert Customer</p>
+			<p class="emailInfo" style="rgba(0, 0, 0, 0); color:#FFFFFF">Insert Customer</p>
 			<fieldset id = "infoField">
 			<div class = "row">
 				<div class = "large-7 medium-7 columns" id = "fnameDiv">
@@ -84,16 +84,35 @@
 			</div>
 			</fieldset>
 		</form>
-		<div id="dynamicModal" class="reveal-modal" data-reveal>
+		<div id="dynamicModal" class="reveal-modal medium" data-reveal style="background-color:#333; top: 6em">
 			<!-- JAVASCRIPT will fill this div -->
 		</div>
-		<div id="e-mailModal" class="reveal-modal" data-reveal>
+		<div id="e-mailModal" class="reveal-modal medium" data-reveal style="background-color:#333; top: 6em">
 			<h2 style="text-align: center;">E-mail is already in use</h2>
 			<div style="text-align: center;">
 				<a onclick="removeModal('e-mailModal');" style="text-align:center; margin: 0px auto; width: 200px;"
 				class="button small expand" id="successBtn">Ok</a>
 			</div>
 		</div>
+		<div id="errorModal" class="reveal-modal medium" data-reveal style="background-color:#333; top: 6em">
+			<!-- JAVASCRIPT will fill this div -->
+		</div>
+		<script>
+			$('select').keypress(function(e) {
+				e.preventDefault();
+				if(e.which == 13) {
+					jQuery(this).blur();
+					jQuery('#emailBtn').focus().click();
+				}
+			});
+
+			$('input').keypress(function(e) {
+				if(e.which == 13) {
+					jQuery(this).blur();
+					jQuery('#emailBtn').focus().click();
+				}
+			});
+		</script>
 <?php
 	// footer includes the database close
 	require($pathToRoot.'includes/footer.php');

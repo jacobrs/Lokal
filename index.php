@@ -51,7 +51,6 @@
 	</div>
 	<script type="text/JavaScript" language="JavaScript">
 			$('input').keypress(function(e) {
-		        console.log("Enter Key Pressed");
 		        if(e.which == 13) {
 		            jQuery(this).blur();
 		            jQuery('#loginBtn').focus().click();

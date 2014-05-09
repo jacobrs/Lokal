@@ -27,10 +27,20 @@ function createUser(){
 			data:{
 				Email: email,
 			},
-			success: function(data){;
-				data = JSON.parse(data);
-				validEntry = true;
-				notifyUser(true, data);
+			success: function(data){
+				if(data != 'error'){
+					data = JSON.parse(data);
+					validEntry = true;
+					notifyUser(true, data);
+				}else{
+					$('#errorModal').empty();
+					$('#errorModal').append('<h2 style="text-align: center;">Something went wrong with the operation, make sure you have an internet connection</h2>'+
+					'<div style="text-align: center;">'+
+					'<a onclick="removeModal(\'errorModal\');" style="text-align:center; margin: 0px auto; width: 200px;"'+
+					'class="button small expand" id="errorBtn">Ok</a>'+
+					'</div>');
+					$('#errorModal').foundation('reveal', 'open');
+				}
 			},
 			error: function(data){
 				notifyUser(false, "none");
@@ -38,7 +48,7 @@ function createUser(){
 			},
 			complete: function(){		
 				document.body.style.cursor = 'default';
-				console.log(new Date().getTime() - start_time);
+				//console.log(new Date().getTime() - start_time);
 			}
 		});
 	}
@@ -162,7 +172,7 @@ function notifyUser(worked, data){
 			$('#emailBtn').parent().remove();
 			$('#month').parent().removeClass().addClass("large-3 medium-7 small-7 columns");
 			$('#day').parent().removeClass().addClass("large-3 medium-7 small-7 large-push-1 columns columns");
-			$('#dynamicModal').append('<p class="confirmHeader" style="background-color:#000000; color:#FFFFFF; text-align:center">Confirm Insert</p>');
+			$('#dynamicModal').append('<p class="confirmHeader" style="rgba(0, 0, 0, 0); color:#FFFFFF; text-align:center">Confirm Insert</p>');
 			$('#dynamicModal').append('<p class="validateInfo" style="float: left">'+fname+' '+lname+'</p><p class="validateInfo" style="float:right">'+month+
 			'/'+day+' (MM/DD)</p><p class="validateInfo" style="text-align:center; clear:both">'+data['email']+'</p>');
 			$('#dynamicModal').append('<ul class="button-group acptDeny"><li class="confirmBtns"><a class = "button medium" onclick = "removeEntry()" id="btnDelete">Cancel</a></li></div>'+
@@ -175,6 +185,12 @@ function notifyUser(worked, data){
 	}else{
 		superBadHappened = true;
 		// SOMETHING BAD HAPPENED WHILE INPUTTING USER
+		$('#errorModal').empty();
+		$('#errorModal').append('<h2 style="text-align: center;">Something went wrong with the operation, make sure you have an internet connection</h2>'+
+		'<div style="text-align: center;">'+
+		'<a onclick="removeModal(\'errorModal\');" style="text-align:center; margin: 0px auto; width: 200px;"'+
+		'class="button small expand" id="errorBtn">Ok</a>'+
+		'</div>');
 		$('#errorModal').foundation('reveal', 'open');
 	}
 }
@@ -199,16 +215,25 @@ function enterEntry(){
 				Month: month
 			},
 			success: function(data){
-				$('#dynamicModal').empty();
-				$('#dynamicModal').append('<h2 style="text-align: center;">Successfully entered user</h2>'+
-				'<div style="text-align: center;">'+
-				'<a onclick="removeModal(\'dynamicModal\');" style="text-align:center; margin: 0px auto; width: 200px;"'+
-				'class="button small expand" id="successBtn">Ok</a>'+
-				'</div>');
+				if(data != 'error'){
+					$('#dynamicModal').empty();
+					$('#dynamicModal').append('<h2 style="text-align: center;">Successfully entered user</h2>'+
+					'<div style="text-align: center;">'+
+					'<a onclick="removeModal(\'dynamicModal\');" style="text-align:center; margin: 0px auto; width: 200px;"'+
+					'class="button small expand" id="successBtn">Ok</a>'+
+					'</div>');
+				}else{
+					$('#dynamicModal').empty();
+					$('#dynamicModal').append('<h2 style="text-align: center;">Something went wrong with the operation, make sure you have an internet connection</h2>'+
+					'<div style="text-align: center;">'+
+					'<a onclick="removeModal(\'dynamicModal\');" style="text-align:center; margin: 0px auto; width: 200px;"'+
+					'class="button small expand" id="errorBtn">Ok</a>'+
+					'</div>');
+				}
 			},
 			error: function(data){
 				$('#dynamicModal').empty();
-				$('#dynamicModal').append('<h2>Something went wrong with the operation, make sure you have an internet connection</h2>'+
+				$('#dynamicModal').append('<h2 style="text-align: center;">Something went wrong with the operation, make sure you have an internet connection</h2>'+
 				'<div style="text-align: center;">'+
 				'<a onclick="removeModal(\'dynamicModal\');" style="text-align:center; margin: 0px auto; width: 200px;"'+
 				'class="button small expand" id="errorBtn">Ok</a>'+
@@ -216,7 +241,7 @@ function enterEntry(){
 			},
 			complete: function(){		
 				document.body.style.cursor = 'default';
-				console.log(new Date().getTime() - start_time);
+				//console.log(new Date().getTime() - start_time);
 			}
 		});
 	}

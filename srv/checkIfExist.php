@@ -11,6 +11,11 @@
 			WHERE `Email` = '".$email."'";
 	$lokaldb->select_db('lokal');
 	$result = $lokaldb->query($sql);
+	if(!$result){
+		echo 'error';
+		$lokaldb->close();
+		exit;
+	}
 	$numrows = $result->num_rows;
 	
 	if($numrows > 0){
@@ -24,4 +29,5 @@
 	$data = json_encode($array);
 	
 	echo $data;
+	$lokaldb->close();
 ?>
