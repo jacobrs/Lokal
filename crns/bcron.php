@@ -1,13 +1,29 @@
 <?php
+    error_reporting(E_ALL);
+    ini_set("display_errors", 1);
 	$pathToRoot = './../';
 	require($pathToRoot.'srv/connect.php');
-	global $lokaldb;	
-	
-	$sql = "SELECT `RestName`, `FirstName`, `LastName`, `DOB`, `Email` 
+	global $lokaldb;
+
+	$currdate = date('d');
+	$currmont = date('m');
+	if($currdate == '29' && $currmont = '02'){
+		$currdate = '28';
+	}
+	$currdate = '2014-'.$currmont.'-'.$currdate;
+
+	$sql = "SELECT `RestName`, c.*
 			FROM `Customers` c
-			INNER JOIN `Restaurant` r
-			ON `r.RestID` = `c.RestID`";
+			INNER JOIN `Restaurants` r
+			ON r.`RestID` = c.`RestID`
+			WHERE DAYOFYEAR(c.`DOB`) - DAYOFYEAR('".$currdate."') = 7 
+			AND ABS(datediff('".$currdate."' , c.`RegDate`)) > 7";
+	//var_dump($sql);
 	$birthday = $lokaldb->query($sql);	//get all customers with restaurant name
+	while(($row = $birthday->fetch_assoc()) !== NULL){
+		echo $row['FirstName'].' '.$row['LastName'].' '.$row['DOB'].'<br>';
+	}
+	/*
 	$today = date("y-m-d");				//get today's date
 	
 	while (($row = $birthday->fetch_assoc()) !== NULL) {
@@ -31,6 +47,9 @@
 				print "ERROR: Couldn't send email.";
 			}
 		}
-	}
+	}*/
+	
+	$lokaldb->close();
+	
 	// $lokaldb->select_db('lokal');
 ?>
