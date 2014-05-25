@@ -9,7 +9,7 @@
 	$month = $_POST['Month'];
 	$day = $_POST['Day'];
 	
-	$date = $month."-".$day;
+	$date = "2014-".$month."-".$day;
 	
 	$sql = "INSERT INTO `Customers`(`Email`, `DOB`, `FirstName`, `LastName`, `RestID`)
 			VALUES ('".$email."', '".$date."', '".$fname."', '".$lname."', 1)";

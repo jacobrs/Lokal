@@ -202,6 +202,9 @@ function removeEntry(){
 function enterEntry(){
 	if(validEntry){
 		document.body.style.cursor = 'wait';
+		if(day == 29 && month == 2){
+			day = 28;
+		}
 		var start_time = new Date().getTime();
 		$.ajax({
 			type: "POST",
