@@ -278,3 +278,26 @@ $(document).on('close', '[data-reveal]', function (e) {
 function removeModal(modal){
 	$('#'+modal).foundation('reveal', 'close');
 }
+
+function searchByCode(){
+	var searchValue = $('#code').val();
+	$('#SearchResult').remove();
+	
+	document.body.style.cursor = 'wait';
+	$.ajax({
+			type: "POST",
+			cache: "false",
+			url:  pathToRoot+"srv/searchForCode.php",
+			data:{
+				code: searchValue
+			},
+			success: function(data){
+				$('#searches').after(data);
+			},
+			error: function(data){
+			},
+			complete: function(){		
+				document.body.style.cursor = 'default';
+			}
+		});
+}

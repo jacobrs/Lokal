@@ -47,7 +47,6 @@
 			LastName VARCHAR(30) NOT NULL,
 			RestID INT(5) NOT NULL,
 			RegDate TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL,
-			Gender CHAR(1) NOT NULL,
 			PRIMARY KEY custID_pk (ID),
 			FOREIGN KEY rest_to_cust (RestID)
 				REFERENCES Restaurants(rest_pk)
