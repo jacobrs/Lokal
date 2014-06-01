@@ -21,8 +21,28 @@
 	//var_dump($sql);
 	$birthday = $lokaldb->query($sql);	//get all customers with restaurant name
 	while(($row = $birthday->fetch_assoc()) !== NULL){
-		echo $row['FirstName'].' '.$row['LastName'].' '.$row['DOB'].'<br>';
+		//echo $row['FirstName'].' '.$row['LastName'].' '.$row['DOB'].'<br>';
+		// **** generate random alphanumeric code ****
+		do{
+			$genCode="";
+			$codeRange = array_merge(range('A', 'Z'),range(0,9));
+			for($i = 0; $i < 16; $i++){
+				$genCode .= $codeRange[array_rand($codeRange, 1)];
+				shuffle($codeRange);
+			}
+			$sql = "SELECT * FROM `Codes` WHERE `Code` = '".$genCode."'";
+			$result = $lokaldb->query($sql);
+			$numrows = $result->num_rows;
+		}while($numrows > 0);	// validate UNIQUE codes
+		$sql = "INSERT INTO `Codes`(`Code`, `CustID`, `Exp`) 
+				VALUES('".$genCode."','".$row['CustID']."', date_add('$currdate', INTERVAL 90 DAY))";
+		$lokaldb->select_db('lokal');
+		$result = $lokaldb->query($sql);
+		if(!$result){
+			// wtf this shouldn't happen
+		}
 	}
+	
 	/*
 	$today = date("y-m-d");				//get today's date
 	

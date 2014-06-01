@@ -8,7 +8,13 @@ html, body{
 fieldset{
 	background: #585858;
 }
-#ccontainer{
+#notFound{
+	color:#FFFFFF;
+}
+#found{
+	color:#FFFFFF;
+}
+#container{
    height:200px;
 }
 #lginBanner{
