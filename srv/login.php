@@ -9,7 +9,7 @@
 	$password = $_POST["psswd"];
 	$username = $_POST["usrnm"];
 
-	if(validate_user($username, $password)){
+	if(validate_user(strtolower($username), $password)){
 		header('location: '.$pathToRoot.'');
 		die();
 	}

@@ -275,3 +275,28 @@ $(document).on('close', '[data-reveal]', function (e) {
 function removeModal(modal){
 	$('#'+modal).foundation('reveal', 'close');
 }
+
+// Function that dictates what to show when the user is trying to add a new restaurant
+// Last Editor: Jacob Gagne
+function changetype(){
+	var sel = document.getElementById('typeselection').value;
+	if(sel == 'old'){
+		$('#newinfo').hide();
+		$('#usern').hide();
+		$('#emailDiv').show();
+		document.getElementById("restn").className = "large-15 medium-15 columns";
+	}
+	else if(sel == 'new'){
+		$('#newinfo').show();
+		$('#usern').show();
+		$('#emailDiv').show();
+		document.getElementById("restn").className = "large-7 medium-7 columns";
+		//$(document).foundation();
+	}
+	else{
+		$('#newinfo').hide();
+		$('#usern').hide();
+		$('#emailDiv').hide();
+		document.getElementById("restn").className = "large-15 medium-15 columns";
+	}
+}

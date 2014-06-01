@@ -130,3 +130,12 @@ button, .button{
 .resultsList{
 	color:red;
 }
+.error-s{
+	color:red;
+	font-weight:bold;
+}
+.error{
+	color:white;
+	text-align: center;
+	width:100%;
+}
