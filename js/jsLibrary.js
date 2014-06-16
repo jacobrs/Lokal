@@ -279,7 +279,6 @@ function removeModal(modal){
 	$('#'+modal).foundation('reveal', 'close');
 }
 
-<<<<<<< HEAD
 // Function that dictates what to show when the user is trying to add a new restaurant
 // Last Editor: Jacob Gagne
 function changetype(){
@@ -303,27 +302,25 @@ function changetype(){
 		$('#emailDiv').hide();
 		document.getElementById("restn").className = "large-15 medium-15 columns";
 	}
-=======
 function searchByCode(){
 	var searchValue = $('#code').val();
 	$('#SearchResult').remove();
 	
 	document.body.style.cursor = 'wait';
 	$.ajax({
-			type: "POST",
-			cache: "false",
-			url:  pathToRoot+"srv/searchForCode.php",
-			data:{
-				code: searchValue
-			},
-			success: function(data){
-				$('#searches').after(data);
-			},
-			error: function(data){
-			},
-			complete: function(){		
-				document.body.style.cursor = 'default';
-			}
-		});
->>>>>>> f91d68ca620240e22ce1cdc32ad4f4690e1ac226
+		type: "POST",
+		cache: "false",
+		url:  pathToRoot+"srv/searchForCode.php",
+		data:{
+			code: searchValue
+		},
+		success: function(data){
+			$('#searches').after(data);
+		},
+		error: function(data){
+		},
+		complete: function(){		
+			document.body.style.cursor = 'default';
+		}
+	});
 }
