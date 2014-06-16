@@ -332,3 +332,12 @@ function searchByCode(){
 		}
 	});
 }
+function clearEmailText(id){
+	document.getElementById(id).value = "";
+}
+function saveEmailText(){
+	return false;
+}
+function calculateLength(id){
+	document.getElementById('counter').innerHTML = document.getElementById(id).value.length + "&nbsp;Characters";
+}

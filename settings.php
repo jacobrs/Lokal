@@ -36,6 +36,15 @@
 			      		</label>
 					</div>
 				</div>
+				<div class = "row restricted-with-area">
+					<div class = "large-5 small-15 column">
+						<a href="javascript:void(0);" style = "width:100%" onclick="saveEmailText();" 
+							class="button small" id="savebtn">Save</a>
+					</div>
+					<div class = "large-4 small-15 column">
+						<p id = "counter">0&nbsp;Characters</p>
+					</div>
+				</div>
 			</fieldset>
 		</form>
 		<script>
@@ -52,6 +61,12 @@
 					jQuery(this).blur();
 					jQuery('#addbtn').focus().click();
 				}
+			});
+
+			$(document).ready(function(){			
+				$('#message').on("keyup", function(e){
+					document.getElementById('counter').innerHTML = document.getElementById('message').value.length + "&nbsp;Characters";
+				});
 			});
 		</script>
 <?php
