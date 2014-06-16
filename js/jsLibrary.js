@@ -13,9 +13,10 @@ function createUser(){
 	lname = $('#lname').val();
 	day = $('#day').val();
 	month = $('#month').val();
+	restaurant = $('#restid').val();
 	var isValid = true;
 	
-	isValid = validateInfo(email, fname, lname, day, month);
+	isValid = validateInfo(email, fname, lname, day, month, restaurant);
 	var start_time = new Date().getTime();
 	
 	if(isValid){
@@ -26,15 +27,24 @@ function createUser(){
 			url:  pathToRoot+"srv/checkIfExist.php",
 			data:{
 				Email: email,
+				Restaurant: restaurant,
 			},
 			success: function(data){
-				if(data != 'error'){
+				if(data != 'error1' && data != 'error2'){
 					data = JSON.parse(data);
 					validEntry = true;
 					notifyUser(true, data);
-				}else{
+				}else if (data == 'error1'){
 					$('#errorModal').empty();
 					$('#errorModal').append('<h2 style="text-align: center;">Something went wrong with the operation, make sure you have an internet connection</h2>'+
+					'<div style="text-align: center;">'+
+					'<a onclick="removeModal(\'errorModal\');" style="text-align:center; margin: 0px auto; width: 200px;"'+
+					'class="button small expand" id="errorBtn">Ok</a>'+
+					'</div>');
+					$('#errorModal').foundation('reveal', 'open');
+				}else if (data == 'error2'){
+					$('#errorModal').empty();
+					$('#errorModal').append('<h2 style="text-align: center;">Your restaurant value is invalid, try refreshing the page</h2>'+
 					'<div style="text-align: center;">'+
 					'<a onclick="removeModal(\'errorModal\');" style="text-align:center; margin: 0px auto; width: 200px;"'+
 					'class="button small expand" id="errorBtn">Ok</a>'+
@@ -54,7 +64,7 @@ function createUser(){
 	}
 }
 
-function validateInfo(email, fname, lname, day, month){
+function validateInfo(email, fname, lname, day, month, restaurant){
 	var pattEmail = new RegExp('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$');
 	var pattName = new RegExp('[a-zA-Z0-9àáâäãåaceèéêëìíîïlnòóôöõøùúûüÿızzñçcšÀÁÂÄÃÅACEÈÉÊËÌÍÎÏLNÒÓÔÖÕØÙÚÛÜŸİZZÑßÇŒÆCŠ?ğ ,.\'-/]+');
 	var bool = true;
@@ -127,6 +137,13 @@ function validateInfo(email, fname, lname, day, month){
 		bool = false;
 	}
 	
+	if(typeof(restaurant) == 'object' || restaurant == ''){
+		if(!$("#restid").find("small").length){
+			$("#restid").after('<small class = "error" style="width:100%; margin-top:-'+errorboxmargin*2.2+'px">Invalid Restaurant</small>');
+		}
+		bool = false;
+	}
+	
 	if(!bool){
 		badHappened = true;
 		resetVariables();
@@ -170,8 +187,7 @@ function notifyUser(worked, data){
 			day = day.slice(-2);
 	
 			$('#emailBtn').parent().remove();
-			$('#month').parent().removeClass().addClass("large-3 medium-7 small-7 columns");
-			$('#day').parent().removeClass().addClass("large-3 medium-7 small-7 large-push-1 columns columns");
+			$('#clearBtn').parent().removeClass().addClass("large-5 medium-5 small-15 columns");
 			$('#dynamicModal').append('<p class="confirmHeader" style="rgba(0, 0, 0, 0); color:#FFFFFF; text-align:center">Confirm Insert</p>');
 			$('#dynamicModal').append('<p class="validateInfo" style="float: left">'+fname+' '+lname+'</p><p class="validateInfo" style="float:right">'+month+
 			'/'+day+' (MM/DD)</p><p class="validateInfo" style="text-align:center; clear:both">'+data['email']+'</p>');
@@ -215,7 +231,8 @@ function enterEntry(){
 				Fname: fname,
 				Lname: lname,
 				Day: day,
-				Month: month
+				Month: month,
+				Restaurant: restaurant,
 			},
 			success: function(data){
 				if(data != 'error'){
@@ -267,9 +284,8 @@ function resetVariables(){
 $(document).on('close', '[data-reveal]', function (e) {
 	if(e.target.id == "dynamicModal"){
 		resetVariables();
-		$('#month').parent().removeClass().addClass("large-2 medium-5 small-8 large-push-8 columns");
-		$('#day').parent().removeClass().addClass("large-2 medium-5 small-7 large-push-8 columns");
-		$('#month').parent().after('<div class = "large-3 medium-5 small-5 columns"><a onclick = "createUser();" style = "margin-top:12px;'+
+		$('#clearBtn').parent().removeClass().addClass("large-2 medium-5 small-15 large-push-1 columns");
+		$('#clearBtn').parent().after('<div class = "large-3 medium-15 small-15 columns"><a onclick = "createUser();" style = "margin-top:12px;'+
 		' text-align:center;" class = "button small expand" id = "emailBtn">Add User</a></div>');
 		$('#dynamicModal').empty();
 	}
@@ -323,7 +339,11 @@ function searchByCode(){
 			code: searchValue
 		},
 		success: function(data){
-			$('#results').after(data);
+			if(data != 'error'){
+				$('#results').after(data);
+			}else{
+				$('#results').after(data);
+			}
 		},
 		error: function(data){
 		},
