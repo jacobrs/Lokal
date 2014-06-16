@@ -6,7 +6,10 @@ html, body{
 	background-size: cover;
 }
 fieldset{
-	background: #585858;
+	background: #333333;
+}
+.row{
+	max-width: none;	
 }
 #notFound{
 	color:#FFFFFF;
@@ -82,10 +85,10 @@ button, .button{
 	color:#555555;
 }
 #emailBtn:focus, #emailBtn:hover{
-	background-color:#404040;
+	background-color:#2ecc71;
 }
 #emailBtn{
-	background-color:#202020;
+	background-color:#27ae60;
 }
 #btnDelete:focus, #btnDelete:hover{
 	background-color:#880000;
@@ -155,4 +158,12 @@ button, .button{
 }
 #subheader{
 	margin-bottom:1em;
+}
+.restricted-banner{
+	max-width:62.5em;
+}
+#search-header{
+	border-top:solid 1px #666666;
+	border-bottom:solid 1px #666666;
+	background-color:#333333;
 }

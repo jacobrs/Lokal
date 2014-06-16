@@ -8,6 +8,7 @@
     <title><?php echo $title?></title>
 	<script src="<?php echo $pathToRoot ?>js/vendor/jquery.js" type="text/javascript" language="javascript"></script>
 	<script src="<?php echo $pathToRoot ?>js/foundation.min.js" type="text/javascript" language="javascript"></script>
+    <link rel="shortcut icon" href="<?php echo $pathToRoot;?>img/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/normalize.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/foundation.min.css">
     <link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/main.css">
@@ -28,14 +29,13 @@
     <!-- Right Nav Section -->
     <ul class="right">
       <li class="divider hide-for-small"></li>
-      <li class="has-dropdown"><a href="#">Menu and Management</a>
+      <li class="has-dropdown"><a href="#">Manage</a>
         <ul class="dropdown"><li class="title back js-generated"></li>
           <li><label>Restaurants</label></li>
           <li class="has-dropdown"><a href="#">Restaurants</a>
             <ul class="dropdown"><li class="title back js-generated"></li>
-              <?php 
-                $arr = $loggedUser->getRestaurants();
-                echo '<li><a href="#">'.$arr.'</a></li>';
+              <?php
+                genRestList($_SESSION["LinkedRestaurants"]);
               ?>
             </ul>
           </li>

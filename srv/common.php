@@ -75,6 +75,17 @@ function validate_user($uname, $psswd){
 		}
 		$_SESSION["Restaurant"] = new restaurant($restname, $restid);
 		$_SESSION["Restaurant"] = serialize($_SESSION["Restaurant"]);
+		$prep = $lokaldb->prepare('SELECT r.`RestID`, `RestName` FROM `Restaurants` r JOIN `Privileges` p ON r.`RestID` = p.`RestID` WHERE p.`AdminID` = ?');
+		$prep->bind_param('i', $dbid);
+		$prep->execute();
+		$prep->bind_result($restaurantid, $namerest);
+		$_SESSION["LinkedRestaurants"] = array();
+		while($prep->fetch()){
+			array_push($_SESSION["LinkedRestaurants"], serialize(new restaurant($namerest, $restaurantid)));
+			//var_dump($_SESSION["LinkedRestaurants"]);
+		}
+		$prep->close();
+		$_SESSION["LinkedRestaurants"] = $_SESSION["LinkedRestaurants"];
 	}
 	return $valid;
 }
@@ -164,5 +175,30 @@ function is_admin(){
 	}
 	return false;
 }
+
+function genRestList($rests){
+	foreach ($rests as $rest) {
+		echo '<li><a href="#">'.unserialize($rest)->getName().'</a></li>';
+	}
+}
+
+function generateDropDownRest($rests){
+	foreach ($rests as $rest) {
+		echo '<option value="'.redneckSalt(base64_encode(unserialize($rest)->getId())).'">'.unserialize($rest)->getName().'</option>';
+	}
+}
+
+function redneckSalt($input){
+	return 'RkL'.$input.'ARFs==';
+}
+
+function redneckUnsalt($input){
+	return preg_replace('ARFs==$', '', preg_replace('/RkL/', '', $input, 1), 1); 
+}
+
+// --------------------------------- WRITE ALL CODE ABOVE THIS ----------------------------------------------
+
+global $defaultMessage;
+$defaultMessage = "";
 
 ?>

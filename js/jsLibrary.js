@@ -267,8 +267,8 @@ function resetVariables(){
 $(document).on('close', '[data-reveal]', function (e) {
 	if(e.target.id == "dynamicModal"){
 		resetVariables();
-		$('#month').parent().removeClass().addClass("large-2 medium-5 small-5 large-push-1 columns");
-		$('#day').parent().removeClass().addClass("large-2 medium-5 small-5 large-push-1 columns");
+		$('#month').parent().removeClass().addClass("large-2 medium-5 small-8 large-push-8 columns");
+		$('#day').parent().removeClass().addClass("large-2 medium-5 small-7 large-push-8 columns");
 		$('#month').parent().after('<div class = "large-3 medium-5 small-5 columns"><a onclick = "createUser();" style = "margin-top:12px;'+
 		' text-align:center;" class = "button small expand" id = "emailBtn">Add User</a></div>');
 		$('#dynamicModal').empty();
@@ -284,28 +284,36 @@ function removeModal(modal){
 function changetype(){
 	var sel = document.getElementById('typeselection').value;
 	if(sel == 'old'){
-		$('#newinfo').hide();
+		$('#fnameDiv').hide();
+		$('#lnameDiv').hide();
+		$('#rpasswd').hide();
+		$('#passwd').hide();
 		$('#usern').hide();
 		$('#emailDiv').show();
-		document.getElementById("restn").className = "large-15 medium-15 columns";
+		document.getElementById("restn").className = "large-15 medium-15 small-15 columns";
 	}
 	else if(sel == 'new'){
-		$('#newinfo').show();
+		$('#fnameDiv').show();
+		$('#lnameDiv').show();
 		$('#usern').show();
+		$('#rpasswd').show();
+		$('#passwd').show();
 		$('#emailDiv').show();
-		document.getElementById("restn").className = "large-7 medium-7 columns";
+		document.getElementById("restn").className = "large-5 medium-15 small-15 columns";
 		//$(document).foundation();
 	}
 	else{
-		$('#newinfo').hide();
+		$('#fnameDiv').hide();
+		$('#lnameDiv').hide();
+		$('#rpasswd').hide();
+		$('#passwd').hide();
 		$('#usern').hide();
 		$('#emailDiv').hide();
 		document.getElementById("restn").className = "large-15 medium-15 columns";
 	}
+}
 function searchByCode(){
 	var searchValue = $('#code').val();
-	$('#SearchResult').remove();
-	
 	document.body.style.cursor = 'wait';
 	$.ajax({
 		type: "POST",
@@ -315,7 +323,7 @@ function searchByCode(){
 			code: searchValue
 		},
 		success: function(data){
-			$('#searches').after(data);
+			$('#results').after(data);
 		},
 		error: function(data){
 		},
