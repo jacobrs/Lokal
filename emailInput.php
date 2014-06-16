@@ -27,6 +27,7 @@
 			var year = "";
 			var gender = "";
 			var DOB = "";
+			var restaurant = "";
 			var errorboxmargin = 7;
 			var validEntry = false;
 		</script>
