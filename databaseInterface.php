@@ -1,8 +1,8 @@
 <?php
 	session_start();
 	$pathToRoot = './';
-	require($pathToRoot.'srv/common.php');
 	require($pathToRoot.'srv/connect.php');
+	require($pathToRoot.'srv/common.php');
 	if(!alive())
 	  header("location: ".$pathToRoot."srv/logout.php");
 	$title = 'Search Code';

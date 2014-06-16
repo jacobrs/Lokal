@@ -75,19 +75,48 @@ function validate_user($uname, $psswd){
 		}
 		$_SESSION["Restaurant"] = new restaurant($restname, $restid);
 		$_SESSION["Restaurant"] = serialize($_SESSION["Restaurant"]);
-		$prep = $lokaldb->prepare('SELECT r.`RestID`, `RestName` FROM `Restaurants` r JOIN `Privileges` p ON r.`RestID` = p.`RestID` WHERE p.`AdminID` = ?');
-		$prep->bind_param('i', $dbid);
-		$prep->execute();
-		$prep->bind_result($restaurantid, $namerest);
-		$_SESSION["LinkedRestaurants"] = array();
-		while($prep->fetch()){
-			array_push($_SESSION["LinkedRestaurants"], serialize(new restaurant($namerest, $restaurantid)));
-			//var_dump($_SESSION["LinkedRestaurants"]);
-		}
-		$prep->close();
-		$_SESSION["LinkedRestaurants"] = $_SESSION["LinkedRestaurants"];
+		refresh($dbid);
 	}
 	return $valid;
+}
+
+function refresh($dbid){
+	global $lokaldb;
+	$prep = $lokaldb->prepare('SELECT r.`RestID`, `RestName` FROM `Restaurants` r JOIN `Privileges` p ON r.`RestID` = p.`RestID` WHERE p.`AdminID` = ?');
+	$prep->bind_param('i', $dbid);
+	$prep->execute();
+	$prep->bind_result($restaurantid, $namerest);
+	$_SESSION["LinkedRestaurants"] = array();
+	while($prep->fetch()){
+		array_push($_SESSION["LinkedRestaurants"], serialize(new restaurant($namerest, $restaurantid)));
+		//var_dump($_SESSION["LinkedRestaurants"]);
+	}
+	$prep->close();
+	$_SESSION["LinkedRestaurants"] = $_SESSION["LinkedRestaurants"];
+}
+
+function switchrest($restid){
+	global $lokaldb;
+	$prep = $lokaldb->prepare('SELECT * FROM `Privileges` WHERE `AdminID` = ? AND `RestID` = ?');
+	$id = unserialize($_SESSION['user'])->getUid();
+	$prep->bind_param('ii', $id, $restid);
+	$prep->execute();
+	$prep->store_result();
+	if($prep->num_rows > 0){
+		$prep->close();
+		$prep = $lokaldb->prepare('SELECT `RestName` FROM `Restaurants` WHERE `RestID` = ?');
+		$prep->bind_param('i', $restid);
+		$prep->execute();
+		$prep->bind_result($restname);
+		while($prep->fetch()){
+			$_SESSION["Restaurant"] = new restaurant($restname, $restid);
+			$_SESSION["Restaurant"] = serialize($_SESSION["Restaurant"]);
+			$prep->close();
+			return true;
+		}
+		return false;
+	}
+	return false;
 }
 
 function alive(){
@@ -112,13 +141,14 @@ function add_restaurant($name){
 	$inst->execute();
 	$ret = $lokaldb->insert_id;
 	link_to_restaurant($ret, 1);
-	return $ret();
+	return $ret;
 }
 
 function add_admin($uname, $fname, $lname, $password, $email){
 	global $lokaldb;
 	$inst = $lokaldb->prepare("INSERT INTO `Admins` (`Username`, `Email`, `Fname`, `Lname`, `Password`) VALUES (?, ?, ?, ?, ?)");
-	$inst->bind_param('ssss', $uname, $email, $fname, $lname, password_hash($password, PASSWORD_DEFAULT));
+	$hash = password_hash($password, PASSWORD_DEFAULT);
+	$inst->bind_param('sssss', $uname, $email, $fname, $lname, $hash);
 	$inst->execute();
 	return $lokaldb->insert_id;
 }
@@ -128,6 +158,7 @@ function link_to_restaurant($restid, $id){
 	$inst = $lokaldb->prepare("INSERT INTO `Privileges` (`AdminID`, `RestId`) VALUES (?, ?)");
 	$inst->bind_param('ii', $id, $restid);
 	$inst->execute();
+	$inst->close();
 	return $inst;
 }
 
@@ -136,9 +167,12 @@ function user_exists($uname){
 	$stmt = $lokaldb->prepare("SELECT * FROM `Admins` WHERE `Username` = ?");
 	$stmt->bind_param('s', $uname);
 	$res = $stmt->execute();
-	$stmt->bind_result($out);
-	if($stmt > 0)
+	$stmt->store_result();
+	if($stmt->num_rows > 0){
+		$stmt->close();
 		return true;
+	}
+	$stmt->close();
 	return false;
 }
 
@@ -146,10 +180,14 @@ function email_exists($email){
 	global $lokaldb;
 	$stmt = $lokaldb->prepare("SELECT * FROM `Admins` WHERE `Email` = ?");
 	$stmt->bind_param('s', $email);
-	$res = $stmt->execute();
-	$stmt->bind_result($out);
-	if($stmt > 0)
+	$stmt->execute();
+	$stmt->store_result();
+	if($stmt->num_rows > 0){
+		$stmt->close();
 		return true;
+		exit();
+	}
+	$stmt->close();
 	return false;
 }
 
@@ -159,10 +197,13 @@ function get_id_by_email($email){
 	$stmt->bind_param('s', $email);
 	$res = $stmt->execute();
 	$stmt->bind_result($out);
-	if($stmt > 0){
+	$stmt->store_result();
+	if($stmt->num_rows > 0){
 		$stmt->fetch();
+		$stmt->close();
 		return $out;
 	}
+	$stmt->close();
 	return false;
 }
 
@@ -177,8 +218,9 @@ function is_admin(){
 }
 
 function genRestList($rests){
+	global $pathToSite;
 	foreach ($rests as $rest) {
-		echo '<li><a href="#">'.unserialize($rest)->getName().'</a></li>';
+		echo '<li><a href="'.$pathToSite.'srv/switch.php?target='.urlencode(redneckSalt(base64_encode(unserialize($rest)->getId()))).'">'.unserialize($rest)->getName().'</a></li>';
 	}
 }
 
@@ -193,7 +235,7 @@ function redneckSalt($input){
 }
 
 function redneckUnsalt($input){
-	return preg_replace('ARFs==$', '', preg_replace('/RkL/', '', $input, 1), 1); 
+	return preg_replace('/ARFs==$/', '', preg_replace('/RkL/', '', $input, 1), 1); 
 }
 
 // --------------------------------- WRITE ALL CODE ABOVE THIS ----------------------------------------------

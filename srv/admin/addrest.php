@@ -14,15 +14,14 @@
 	$unameRegEx  = "/^[a-zA-Z0-9]{3,15}?$/";
 	global $emailregex;
 	global $nameregex;
-	$password = preg_replace($passRegEx, "", $_POST['pass']);
-	$fname = preg_replace($nameregex, "", $_POST['fname']);
-	$lname = preg_replace($nameregex, "", $_POST['lname']);
-	$uname = preg_replace($unameRegEx, "", $_POST['usern']);
-	$rname = preg_replace($nameregex, "", $_POST['restn']);
-	$rpassword = preg_replace($passRegEx, "", $_POST['rpass']);
-	$email = preg_replace($emailregex, "", $_POST['email']);
-	$type = preg_replace($unameRegEx, "", $_POST['addtype']);
-	var_dump($type);
+	$password = preg_match_all($passRegEx, $_POST['pass']);
+	$fname = preg_match_all($nameregex, $_POST['fname']);
+	$lname = preg_match_all($nameregex, $_POST['lname']);
+	$uname = preg_match_all($unameRegEx, $_POST['usern']);
+	$rname = preg_match_all($nameregex, $_POST['restn']);
+	$rpassword = preg_match_all($passRegEx, $_POST['rpass']);
+	$email = preg_match_all($emailregex, $_POST['email']);
+	$type = preg_match_all($unameRegEx, $_POST['addtype']);
 	/*
 		Validations to insert
 		x user exists if (if based on existing)
@@ -32,59 +31,61 @@
 		x username is not taken
 		x password regular expression
 	*/ 
-
+	if($type){
+		$type = $_POST['addtype'];
+	}
 	if($type == "new"){
-		if($password != $_POST['pass']){
+		if(!$password){
 			$errormsg = "Invalid Password"; getout();}
-		if(strlen($password) > 20 || strlen($password) < 6){
+		if(strlen($_POST['pass']) > 20 || strlen($_POST['pass']) < 6){
 			$errormsg = "The password should be 6-20 characters"; getout();}
-		if(strlen($password) != strlen($rpassword)){
+		if($_POST['pass'] != $_POST['rpass']){
 			$errormsg = "Passwords entered do not match"; getout();}
-		if($fname != $_POST['fname'] || strlen($fname) < 1 || strlen($lname) > 20){
+		if(!$fname || strlen($_POST['fname']) < 1 || strlen($_POST['fname']) > 20){
 			$errormsg = "First Name is Invalid"; getout();}
-		if($lname != $_POST['lname'] || strlen($lname) < 1 || strlen($lname) > 20){
+		if(!$lname || strlen($_POST['lname']) < 1 || strlen($_POST['lname']) > 20){
 			$errormsg = "Last Name is Invalid"; getout();}
-		if($uname != $_POST['usern'] || strlen($uname) < 3 || strlen($uname) > 15){
+		if(!$uname || strlen($_POST['usern']) < 3 || strlen($_POST['usern']) > 15){
 			$errormsg = "Username is invalid [3-15]";getout();}
-		if($rname != $_POST['restn'] || strlen($rname) < 3 || strlen($rname) > 30){
+		if(!$rname || strlen($_POST['restn']) < 3 || strlen($_POST['restn']) > 30){
 			$errormsg = "Restaurant Name is Invalid [3-20]"; getout();}
-		if($email != $_POST['email'] || strlen($email) < 6 || strlen($email) > 100){
+		if(!$email || strlen($_POST['email']) < 6 || strlen($_POST['email']) > 100){
 			$errormsg = "Email is Invalid [6-100]";getout();}
-		if(user_exists($uname)){
+		if(user_exists($_POST['usern'])){
 			$errormsg = "Username is taken"; getout();}
-		if(email_exists($email)){
+		if(email_exists($_POST['email'])){
 			$errormsg = "Email already in use"; getout();}
 		else{
 			// add admin to the database and add a restaurant with proper linking
-			$admid  = add_admin(strtolower($uname), $fname, $lname, $password, strtolower($email));
-			$restid = add_restaurant($rname);
+			$admid  = add_admin(strtolower($_POST['usern']), $_POST['fname'], $_POST['lname'], $_POST['pass'], strtolower($_POST['email']));
+			$restid = add_restaurant($_POST['restn']);
 			link_to_restaurant($restid, $admid);
 			header('location: '.$pathToRoot.'settings.php?success=1');
 			die();
 		}
 	}
 	else if ($type == "old"){
-		if($email != $_POST['email'] || strlen($email) < 6 || strlen($email) > 100){
+		if(!$email || strlen($_POST['email']) < 6 || strlen($_POST['email']) > 100){
 			$errormsg = "Email is Invalid [6-100]";getout();}
-		if($rname != $_POST['restn'] || strlen($rname) < 3){
+		if(!$rname || strlen($_POST['restn']) < 3){
 			$errormsg = "Restaurant Name is Invalid [3-20]";getout();}
-		if(!email_exists($email)){
+		if(!email_exists($_POST['email'])){
 			$errormsg = "No user with that email";getout();}
 		else{
-			$admid  = get_id_by_email($email);
-			$restid = add_restaurant($rname);
+			$admid  = get_id_by_email($_POST['email']);
+			$restid = add_restaurant($_POST['restn']);
 			if($admid != 1)
 				link_to_restaurant($restid, $admid);
 			header('location: '.$pathToRoot.'settings.php?success=1');
 			die();
 		}
 	}
-	else if ($type == "old"){
-		if($rname != $_POST['restn'] || strlen($rname) < 3){
+	else if ($type == "this"){
+		if(!$rname || strlen($_POST['restn']) < 3){
 			$errormsg = "Restaurant Name is Invalid [3-20]";getout();}
 		else{
 			$admid  = unserialize($_SESSION['user'])->getUid();
-			$restid = add_restaurant($rname);
+			$restid = add_restaurant($_POST['restn']);
 			if($admid != 1)
 				link_to_restaurant($restid, $admid);
 			header('location: '.$pathToRoot.'settings.php?success=1');

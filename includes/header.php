@@ -1,6 +1,8 @@
 <?php
   error_reporting(E_ALL);
   ini_set("display_errors", 1);
+  global $pathToSite;
+  $pathToSite = $pathToRoot;
   $loggedUser = unserialize($_SESSION['user']);
   $restaurant = unserialize($_SESSION['Restaurant']);
 ?>

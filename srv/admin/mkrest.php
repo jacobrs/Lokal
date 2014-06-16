@@ -7,6 +7,7 @@
 	require($pathToRoot.'srv/connect.php');
 	if(!alive() || !is_admin())
 	  header("location: ".$pathToRoot."srv/logout.php");
+	refresh(unserialize($_SESSION['user'])->getUid());
 	$title = 'Add Restaurant';
 ?>
 <html>

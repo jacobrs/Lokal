@@ -1,13 +1,12 @@
 <?php
 	session_start();
-	error_reporting(E_ALL);
-    ini_set("display_errors", 1);
 	$pathToRoot = './';
-	require($pathToRoot.'srv/common.php');
 	require($pathToRoot.'srv/connect.php');
+	require($pathToRoot.'srv/common.php');
 	if(!alive())
 	  header("location: ".$pathToRoot."srv/logout.php");
 	$title = 'Manage';
+	refresh(unserialize($_SESSION['user'])->getUid());
 ?>
 <html>
 	<head>
@@ -29,6 +28,14 @@
 					</div>
 				';
 			?>
+				<div class = "row">
+					<div class = "large-15 small-15 medium-15 column">
+						<label style="color:#FFFFFF;">Email Message
+			        		<textarea id="message" autocomplete="off"
+			        		name="mesg" placeholder="Enter a message for your customers..."></textarea>
+			      		</label>
+					</div>
+				</div>
 			</fieldset>
 		</form>
 		<script>

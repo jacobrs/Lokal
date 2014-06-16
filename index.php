@@ -58,9 +58,12 @@
 		        }
 		    });
 		</script>
-</body>
+		<script>
+		    $(document).foundation();
+		</script>
+	</body>
 </html>
 <?php
-	// footer includes the database close
-	require($pathToRoot.'includes/footer.php');
+	global $lokaldb;
+	$lokaldb->close();
 ?>
