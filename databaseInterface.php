@@ -17,6 +17,7 @@
 	<body>
 		<br><br>
 		<div class = "row" id = "searches">
+			<!-- Only allow admins/managers to search by name/email -->
 			<div class="row collapse">
 				<div class="small-3 columns" style="min-width: 205px;">
 				  <input type="text" id="name" name="name" placeholder="Search by name">
