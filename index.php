@@ -1,50 +1,69 @@
 <?php
-	$pathToRoot = './';
-	error_reporting(E_ALL);
- 	ini_set("display_errors", 1);
 	session_start();
-	require('./srv/connect.php');
+	$pathToRoot = './';
+	require($pathToRoot.'srv/connect.php');
+	if(isset($_SESSION["user"])){
+		header("location: ".$pathToRoot."emailInput.php");
+		exit();
+	}
 ?>
 <html>
 <head>
 	<meta charset="utf-8">
 	<title>Log-in Page</title>
 	<link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/foundation.min.css">
-	<!--<link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/normalize.css">-->
+	<!--<link rel="stylesheet" type="text/css" href="<?php //echo $pathToRoot ?>css/normalize.css">-->
 	<link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/main.css">
 	<script src="<?php echo $pathToRoot ?>js/jquery.js" type="text/javascript" language="javascript"></script>
 	<script src="<?php echo $pathToRoot ?>js/foundation.min.js" type="text/javascript" language="javascript"></script>
+	<script src="<?php echo $pathToRoot ?>js/homejs/load.js" type="text/javascript" language="javascript"></script>
 	<!--<script src="<?php //echo $pathToRoot ?>js/modernizr.js" type="text/javascript" language="javascript"></script>-->
 </head>
-<body>
+<body><br><br>
+	<div class="full" style="text-align:center;" id="container">
+		<h2 class="welcome-page-header" id="titleheader">JAGB Technologies</h2>
+		<h3 class="welcome-page-header" id="subheader">Restaurant Management System</h3>
+	</div>
+	<br><br>
 	<div class="full width" id="lginBanner">
 		<form 	name = "login-form" 
 				style="padding-top:20px;padding-bottom:15px;background-color:#333333;" 
 				method="POST" action ="<?php echo $pathToRoot;?>srv/login.php"
 				id="lginForm">
-			<div class="row">
-			    <div class="large-6 columns">
+			<div class="row restricted-banner">
+			    <div class="large-6 medium-6 small-15 columns">
 			     	<label style="color:#CCCCCC;">Username
 			        	<input id="username" autocomplete="off"
-			        	name="username" type="text" placeholder="Username"/>
+			        	name="usrnm" type="text" placeholder="Username"/>
 			      	</label>
 			    </div>
-			    <div class="large-6 columns">
+			    <div class="large-6 medium-6 small-15 columns">
 			      	<label style="color:#CCCCCC;">Password
 			        	<input id="password" autocomplete="off"
 			        	name="psswd" type="password" placeholder="Password"/>
 			      	</label>
 			    </div>
-				<div class="large-2 columns" style="margin-top:15px; text-align:center;">
-					<a href="#" onclick="document.forms['login-form'].submit();" style="width:15em;"
-						class="button tiny" id="loginBtn">Login</a>
+				<div class="large-3 medium-2 small-15 columns" style="text-align:center; float:left;">
+					<a href="#" onclick="document.forms['login-form'].submit();" 
+						class="button small" style="height:38px; width:100%; margin-top:13px" id="loginBtn">Login</a>
 				</div>
 			</div>
 		</form>
 	</div>
-</body>
+	<script type="text/JavaScript" language="JavaScript">
+			$('input').keypress(function(e) {
+		        if(e.which == 13) {
+		            jQuery(this).blur();
+		            jQuery('#loginBtn').focus().click();
+		        }
+		    });
+		</script>
+		<script>
+		    $(document).foundation();
+		</script>
+	</body>
 </html>
 <?php
 	global $lokaldb;
-	$lokaldb -> close();
+	$lokaldb->close();
 ?>

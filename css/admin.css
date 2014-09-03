@@ -1,0 +1,11 @@
+.addfrm{
+	margin-left: auto;
+   	margin-right: auto;
+  	margin-bottom: 0px;
+   	width:50%;
+   	min-width: 300px;
+}
+
+.centered{
+	text-align: center;
+}

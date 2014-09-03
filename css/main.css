@@ -1,13 +1,55 @@
 html, body{
 	width:100%;
 	height:100%;
-	background-color:#000000;
+	/*background-color:#000000;*/
+	background-color:#27ae60;
+	background-size: cover;
+}
+fieldset{
+	background: #333333;
+}
+.row{
+	max-width: none;	
+}
+#notFound{
+	color:#FFFFFF;
+}
+#found{
+	color:#FFFFFF;
+}
+#container{
+   height:200px;
 }
 #lginBanner{
-   position: absolute;
-   top: 40%;
+   position: relative;
    left: 0;
    width: 100%;
+}
+#infoField{
+	margin-top: 0px;
+	min-width: 50px;
+}
+.full{
+   position: relative;
+   left: 0;
+   width: 100%;
+}
+.validateInfo{
+	font-size: 1.5em;
+}
+.resultContainer p{
+	text-align: left;
+	color: #FFFFFF;
+}
+#centerChoice{
+	margin-left: 10%;
+}
+#userResult{
+	margin: 0px auto;
+	max-width: 500px;
+	min-width: 250px; 
+    border-color:#585858;
+    border-style: solid;
 }
 #lginForm{
    margin-left: auto;
@@ -19,6 +61,9 @@ html, body{
 #inputForm{
    margin-left: auto;
    margin-right: auto;
+   margin-bottom: 0px;
+   width:80%;
+   min-width: 300px;
 }
 #searches{
    width: 100%;
@@ -31,12 +76,108 @@ html, body{
    margin-right: auto;
 
 }
+button, .button{
+	color:#333333;
+	background-color:#27ae60;
+}
 .button:hover, button:focus, .button:hover, .button:focus{
-	background-color:#777777;
+	background-color:#2ecc71;
+	color:#555555;
+}
+#emailBtn:focus, #emailBtn:hover{
+	background-color:#2ecc71;
+}
+#emailBtn{
+	background-color:#27ae60;
+}
+#btnDelete:focus, #btnDelete:hover{
+	background-color:#880000;
+}
+#btnDelete{
+	background-color:#D00000;
+	width:100%;
+}
+#btnEnter{
+	background-color:#7FFF00;
+	width:100%;
+}
+#btnEnter:focus, #btnEnter:hover{
+	background-color:#659D32;
+}
+.emailInfo{
+	margin-bottom: 0px;
+	margin-left: 35px;
+	font-family:"fantBlippo", Georgia, sans-serif;
+	font-size: 1.3em;
+}
+.dobDivs{
+	position: relative;
+	display: inline-block;
+	width: 100%;
+	margin-right: 6px;
+}
+.errors{
+	text-align: center;
+	color: red;
+	font-weight: bold;
+	margin-top: 10px;
 }
 .small-1{
 	min-width: 67px;
 }
-button, .button{
-	background-color:#555555;
+.confirmHeader{
+	font-family:"fantBlippo", Georgia, sans-serif;
+	font-size:1.2em;
+	margin-bottom: 0px;
+}
+.acptDeny{
+	max-width: 500px;
+	min-width: 250px;
+	margin: 0px auto;
+}
+.confirmBtns{
+	width:50%;
+}
+.resultsList{
+	color:red;
+}
+.error-s{
+	color:red;
+	font-weight:bold;
+}
+.error{
+	color:white;
+	width:100%;
+}
+.welcome-page-header{
+	color:#333333;
+}
+#titleheader{
+	margin-top:2em;
+}
+#subheader{
+	margin-bottom:1em;
+}
+.restricted-banner{
+	max-width:62.5em;
+}
+#search-header{
+	border-top:solid 1px #666666;
+	border-bottom:solid 1px #666666;
+	background-color:#333333;
+}
+footer{
+	font-size:8pt;
+	padding-top:1em;
+	text-align: center;
+	color:#cccccc;
+	min-height:5em;
+	background-color:#333333;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}
+#message{
+	max-height: 20em;
+	max-width:100%;
 }

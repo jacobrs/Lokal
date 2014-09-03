@@ -1,0 +1,68 @@
+<?php
+	session_start();
+	$pathToRoot = './';
+	require($pathToRoot.'srv/connect.php');
+	require($pathToRoot.'srv/common.php');
+	if(!alive())
+	  header("location: ".$pathToRoot."srv/logout.php");
+	$title = 'Search Code';
+?>
+
+<html>
+<<<<<<< HEAD
+	<head>
+		<meta charset="utf-8">
+		<title>Input Info</title>
+		<link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/foundation.min.css">
+		<link rel="stylesheet" type="text/css" href="<?php echo $pathToRoot ?>css/main.css">
+		<script src="<?php echo $pathToRoot ?>js/jquery.js" type="text/javascript" language="javascript"></script>
+		<script src="<?php echo $pathToRoot ?>js/foundation.min.js" type="text/javascript" language="javascript"></script>
+		<script src="<?php echo $pathToRoot ?>js/jsLibrary.js" type="text/javascript" language="javascript"></script>
+		<script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+	</head>
+	<body>
+		<br><br>
+		<div class = "row" id = "searches">
+			<!-- Only allow admins/managers to search by name/email -->
+			<div class="row collapse">
+				<div class="small-3 columns" style="min-width: 205px;">
+				  <input type="text" id="name" name="name" placeholder="Search by name">
+				</div>
+				<div class="small-1 columns" style="margin-right:20px;">
+				  <a class="button postfix">Go</a>
+				</div>
+				<div class="small-3 columns" style="min-width: 205px;">
+				  <input type="text" id="code" name="code" placeholder="Search by code">
+				</div>
+				<div class="small-1 columns" style="margin-right:20px;">
+				  <a class="button postfix">Go</a>
+				</div>
+				<div class="small-3 columns" style="min-width: 205px;">
+				  <input type="text" id="email" name="email" placeholder="Search by email">
+				</div>
+				<div class="small-1 columns" style="float:left;">
+				  <a class="button postfix">Go</a>
+=======
+	<?php require_once($pathToRoot.'includes/header.php');?>
+		<script> window.pathToRoot = "<?php echo $pathToRoot;?>"; </script>
+		<div id="search-header">
+			<br><br>
+			<div class = "row restricted-banner" id = "searches">
+				<div class="row collapse">
+					<div class="large-10 large-push-1 medium-10 medium-push-1  small-6 small-push-3 columns">
+					  <input type="text" id="code" name="code" placeholder="Search by code" autocomplete="off">
+					</div>
+					<div id="srchCodeBtn" class="large-2 large-pull-2 medium-2 medium-pull-2 small-2 small-pull-4 columns">
+					  <a onclick="searchByCode();" class="button postfix">Go</a>
+					</div>
+>>>>>>> 5a379c5d48a715fcf88b4f1358adee08a732afcd
+				</div>
+			</div>
+			<br>
+		</div>
+		<div class = "row" id = "results">
+		</div>
+<?php
+	// footer includes the database close
+	require($pathToRoot.'includes/footer.php');
+?>

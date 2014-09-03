@@ -1,4 +1,4 @@
-var pathToRoot = "http://localhost/lokal/";
+var pathToRoot = window.pathToRoot;
 
 /*
 	Ajax code for creating a user
@@ -7,24 +7,16 @@ var pathToRoot = "http://localhost/lokal/";
 	
 	To-do: Comment all later on and make it bullet-proof
 */
-
-var uniqueIdentifier = 0;
-var badHappened = false;
-var superBadHappened = false;
-var goodHappened = false;
-
 function createUser(){
-	var email = $('#email').val();
-	var fname = $('#fname').val();
-	var lname = $('#lname').val();
-	var day = $('#day').val();
-	var month = $('#month').val();
-	var year = $('#year').val();
-	var gender = $('#gender').val();
+	email = $('#email').val();
+	fname = $('#fname').val();
+	lname = $('#lname').val();
+	day = $('#day').val();
+	month = $('#month').val();
+	restaurant = $('#restid').val();
 	var isValid = true;
 	
-	uniqueIdentifier++;
-	isValid = validateInfo(email, fname, lname, day, month, gender, year);
+	isValid = validateInfo(email, fname, lname, day, month, restaurant);
 	var start_time = new Date().getTime();
 	
 	if(isValid){
@@ -32,34 +24,48 @@ function createUser(){
 		$.ajax({
 			type: "POST",
 			cache: "false",
-			url:  pathToRoot+"srv/createUser.php",
+			url:  pathToRoot+"srv/checkIfExist.php",
 			data:{
 				Email: email,
-				Fname: fname,
-				Lname: lname,
-				Year: year,
-				Month: month,
-				Day: day,
-				Gender: gender
+				Restaurant: restaurant,
 			},
 			success: function(data){
-				data = JSON.parse(data);
-				console.log(data);
-				notifyUser(true, data);
+				if(data != 'error1' && data != 'error2'){
+					data = JSON.parse(data);
+					validEntry = true;
+					notifyUser(true, data);
+				}else if (data == 'error1'){
+					$('#errorModal').empty();
+					$('#errorModal').append('<h2 style="text-align: center;">Something went wrong with the operation, make sure you have an internet connection</h2>'+
+					'<div style="text-align: center;">'+
+					'<a onclick="removeModal(\'errorModal\');" style="text-align:center; margin: 0px auto; width: 200px;"'+
+					'class="button small expand" id="errorBtn">Ok</a>'+
+					'</div>');
+					$('#errorModal').foundation('reveal', 'open');
+				}else if (data == 'error2'){
+					$('#errorModal').empty();
+					$('#errorModal').append('<h2 style="text-align: center;">Your restaurant value is invalid, try refreshing the page</h2>'+
+					'<div style="text-align: center;">'+
+					'<a onclick="removeModal(\'errorModal\');" style="text-align:center; margin: 0px auto; width: 200px;"'+
+					'class="button small expand" id="errorBtn">Ok</a>'+
+					'</div>');
+					$('#errorModal').foundation('reveal', 'open');
+				}
 			},
 			error: function(data){
 				notifyUser(false, "none");
+				validEntry = false;
 			},
 			complete: function(){		
 				document.body.style.cursor = 'default';
-				console.log(new Date().getTime() - start_time);
+				//console.log(new Date().getTime() - start_time);
 			}
 		});
 	}
 }
 
-function validateInfo(email, fname, lname, day, month, gender, year){
-	var pattEmail = new RegExp('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$');
+function validateInfo(email, fname, lname, day, month, restaurant){
+	var pattEmail = new RegExp('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$');
 	var pattName = new RegExp('[a-zA-Z0-9‡·‚‰„ÂaceËÈÍÎÏÌÓÔlnÚÛÙˆı¯˘˙˚¸ˇ˝zzÒÁcöû¿¡¬ƒ√≈ACE»… ÀÃÕŒœLN“”‘÷’ÿŸ⁄€‹ü›ZZ—ﬂ«å∆Cäé? ,.\'-/]+');
 	var bool = true;
 	var map = {
@@ -78,81 +84,69 @@ function validateInfo(email, fname, lname, day, month, gender, year){
 	};
 	
 	setEverythingToDefault();
-	
-	if(!pattEmail.test(email)){
-		$('#EmailLabel').contents().first().replaceWith("Error");
-		$("#EmailLabel").attr('class', 'error');
+
+	if(!pattEmail.test(email) || email == ''){
+		$("#EmailLabel").removeClass().addClass('error');
 		$("#EmailLabel").css('color', 'red');
-		$("#email").attr('class', 'error');
+		$("#email").removeClass().addClass('error');
 		if(!$("#emailDiv").find("small").length){
-			$("#emailDiv").append('<small class = "error">Invalid E-mail</small>');
+			$("#emailDiv").append('<small class = "error" style="margin-top:-'+errorboxmargin+'px">Invalid E-mail</small>');
 		}
 		bool = false;
 	}
-	if(!pattName.test(fname)){
-		$('#FnameLabel').contents().first().replaceWith("Error");
-		$("#FnameLabel").attr('class', 'error');
+	if(!pattName.test(fname) || fname == ''){
+		$("#FnameLabel").removeClass().addClass('error');
 		$("#FnameLabel").css('color', 'red');
-	    $("#fname").attr('class', 'error');
+	    $("#fname").removeClass().addClass('error');
 		if(!$("#fnameDiv").find("small").length){
-			$("#fnameDiv").append('<small class = "error">Invalid First Name</small>');
+			$("#fnameDiv").append('<small class = "error" style="margin-top:-'+errorboxmargin+'px">Invalid First Name</small>');
 		}
 		bool = false;
 	}
-	if(!pattName.test(lname)){
-		$('#LnameLabel').contents().first().replaceWith("Error");
-		$("#LnameLabel").attr('class', 'error');
+	if(!pattName.test(lname) || lname == ''){
+		$("#LnameLabel").removeClass().addClass('error');
 		$("#LnameLabel").css('color', 'red');
-		$("#lname").attr('class', 'error');
+		$("#lname").removeClass().addClass('error');
 		if(!$("#lnameDiv").find("small").length){
-			$("#lnameDiv").append('<small class = "error">Invalid Last Name</small>');
+			$("#lnameDiv").append('<small class = "error" style="margin-top:-'+errorboxmargin+'px">Invalid Last Name</small>');
 		}
 		bool = false;
 	}
 	
-	if(typeof(day) === 'object'){
-		$("#day option:first").text("Error");
+	if(typeof(day) === 'object' || day == 32){
 		$("#day").val("32");
+		if(!$("#day").find("small").length){
+			$("#day").after('<small class = "error" style="width:100%; margin-top:-'+errorboxmargin*2.2+'px">Invalid Day</small>');
+		}
 		bool = false;
-	}else{
-		$("#day option:first").text("Day");
 	}
 	
-	if(typeof(month) !== 'object'){
+	if(typeof(month) !== 'object' && month != 13){
 		if(day > map[month]){
-			$("#day option:first").text("Error");
 			$("#day").val("32");
+			if(!$("#day").find("small").length){
+				$("#day").after('<small class = "error" style="width:100%; margin-top:-'+errorboxmargin*2.2+'px">Invalid Day</small>');
+			}
 			bool = false;
-		}else{
-			$("#day option:first").text("Day");
 		}
-		$("#month option:first").text("Month");
 	}else{
-		$("#month option:first").text("Error");
+		if(!$("#month").find("small").length){
+				$("#month").after('<small class = "error" style="width:100%; margin-top:-'+errorboxmargin*2.2+'px">Invalid Month</small>');
+		}
 		$("#month").val("13");
 		bool = false;
 	}
 	
-	if(!(gender == 'M' || gender == 'F')){
-		$("#gender option:first").text("Error");
-		$("#gender").val("G");
+	if(typeof(restaurant) == 'object' || restaurant == ''){
+		if(!$("#restid").find("small").length){
+			$("#restid").after('<small class = "error" style="width:100%; margin-top:-'+errorboxmargin*2.2+'px">Invalid Restaurant</small>');
+		}
 		bool = false;
-	}else{
-		$("#gender option:first").text("Gender");
-	}
-	
-	if(typeof(year) === 'object'){
-	 	var myYear = new Date().getFullYear() + 1;
-		$("#year option:first").text("Error");
-		$("#year").val(myYear);
-		bool = false;
-	}else{
-		$("#year option:first").text("Year");
 	}
 	
 	if(!bool){
-		$("#infoField").after('<p style="color:red; text-align:center">User was not created, make sure everything is valid('+uniqueIdentifier+')</p>');
 		badHappened = true;
+		resetVariables();
 	}else{
 		goodHappened = true;
 	}
@@ -161,50 +155,200 @@ function validateInfo(email, fname, lname, day, month, gender, year){
 }
 
 function setEverythingToDefault(){
-	$('#EmailLabel').contents().first().replaceWith("E-mail");
-	$("#EmailLabel").attr('class', '');
+	$("#EmailLabel").removeClass();
 	$("#EmailLabel").css('color', 'white');
-	$("#email").attr('class', '');
-	$("#emailDiv").find("small").remove();
+	$("#email").removeClass();
 	
-	$('#FnameLabel').contents().first().replaceWith("First Name");
-	$("#FnameLabel").attr('class', '');
+	$("#FnameLabel").removeClass();
 	$("#FnameLabel").css('color', 'white');
-	$("#fname").attr('class', '');
-	$("#fnameDiv").find("small").remove();
+	$("#fname").removeClass();
 	
-	$('#LnameLabel').contents().first().replaceWith("Last Name");
-	$("#LnameLabel").attr('class', '');
+	$("#LnameLabel").removeClass();
 	$("#LnameLabel").css('color', 'white');
-	$("#lname").attr('class', '');
-	$("#lnameDiv").find("small").remove();
+	$("#lname").removeClass();
+	
+	$("html").find("small").remove();
 	
 	if(goodHappened || badHappened || superBadHappened){
-		$("html").find("p").remove();
 		goodHappened = false;
 		badHappened = false;
 		superBadHappened = false;
 	}
 }
 
+var hexColorP = "#000033";
 function notifyUser(worked, data){
-	var genderMap = {
-		"M":"Male",
-		"F":"Female"
-	};
+    //console.log(data);
 	if(worked){
 		if(data['error'] == 0){
-			$("#infoField").after('<p style="color:#7CFC00; text-align:center">Successfully added user('+uniqueIdentifier+')</p><br>'+
-			'<p style="color:#7CFC00; text-align:center">Name: '+ data['fname']+" "+data['lname']+'</p><br><p style="color:#7CFC00;'+ 
-			'text-align:center">E-mail: '+data['email']+'</p><br><p style="color:#7CFC00; text-align:center">Gender: '+genderMap[data['gender']]+
-			'</p><br><p style="color:#7CFC00; text-align:center">Date of Birth: '+data['DOB']);
+			month = '0'+month;
+			month = month.slice(-2);
+			day = '0'+day;
+			day = day.slice(-2);
+	
+			$('#emailBtn').parent().remove();
+			$('#clearBtn').parent().removeClass().addClass("large-5 medium-5 small-15 columns");
+			$('#dynamicModal').append('<p class="confirmHeader" style="rgba(0, 0, 0, 0); color:#FFFFFF; text-align:center">Confirm Insert</p>');
+			$('#dynamicModal').append('<p class="validateInfo" style="float: left">'+fname+' '+lname+'</p><p class="validateInfo" style="float:right">'+month+
+			'/'+day+' (MM/DD)</p><p class="validateInfo" style="text-align:center; clear:both">'+data['email']+'</p>');
+			$('#dynamicModal').append('<ul class="button-group acptDeny"><li class="confirmBtns"><a class = "button medium" onclick = "removeEntry()" id="btnDelete">Cancel</a></li></div>'+
+			'<li class="confirmBtns"><a class = "button medium" onclick = "enterEntry()" id = "btnEnter">Confirm</a></li></ul>');
+			$('#dynamicModal').foundation('reveal', 'open');
 		}else if(data['error'] == 1){
-			$("#infoField").after('<p style="color:red; text-align:center">Email is already in use ('+uniqueIdentifier+')</p><br>');
-		}else if(data['error'] == 2){
-			$("#infoField").after('<p style="color:red; text-align:center">Someone with the same name already exists ('+uniqueIdentifier+')</p><br>');
+			// EMAIL ALREADY IN USE
+			$('#e-mailModal').foundation('reveal', 'open');
 		}
 	}else{
 		superBadHappened = true;
-		$("#infoField").after('<p style="color:red; text-align:center">Something went wrong while try to create the user ('+uniqueIdentifier+')</p><br>');
+		// SOMETHING BAD HAPPENED WHILE INPUTTING USER
+		$('#errorModal').empty();
+		$('#errorModal').append('<h2 style="text-align: center;">Something went wrong with the operation, make sure you have an internet connection</h2>'+
+		'<div style="text-align: center;">'+
+		'<a onclick="removeModal(\'errorModal\');" style="text-align:center; margin: 0px auto; width: 200px;"'+
+		'class="button small expand" id="errorBtn">Ok</a>'+
+		'</div>');
+		$('#errorModal').foundation('reveal', 'open');
 	}
+}
+
+function removeEntry(){
+	$('#dynamicModal').foundation('reveal', 'close');
+}
+
+function enterEntry(){
+	if(validEntry){
+		document.body.style.cursor = 'wait';
+		if(day == 29 && month == 2){
+			day = 28;
+		}
+		var start_time = new Date().getTime();
+		$.ajax({
+			type: "POST",
+			cache: "false",
+			url:  pathToRoot+"srv/createUser.php",
+			data:{
+				Email: email,
+				Fname: fname,
+				Lname: lname,
+				Day: day,
+				Month: month,
+				Restaurant: restaurant,
+			},
+			success: function(data){
+				if(data != 'error'){
+					$('#dynamicModal').empty();
+					$('#dynamicModal').append('<h2 style="text-align: center;">Successfully entered user</h2>'+
+					'<div style="text-align: center;">'+
+					'<a onclick="removeModal(\'dynamicModal\');" style="text-align:center; margin: 0px auto; width: 200px;"'+
+					'class="button small expand" id="successBtn">Ok</a>'+
+					'</div>');
+				}else{
+					$('#dynamicModal').empty();
+					$('#dynamicModal').append('<h2 style="text-align: center;">Something went wrong with the operation, make sure you have an internet connection</h2>'+
+					'<div style="text-align: center;">'+
+					'<a onclick="removeModal(\'dynamicModal\');" style="text-align:center; margin: 0px auto; width: 200px;"'+
+					'class="button small expand" id="errorBtn">Ok</a>'+
+					'</div>');
+				}
+			},
+			error: function(data){
+				$('#dynamicModal').empty();
+				$('#dynamicModal').append('<h2 style="text-align: center;">Something went wrong with the operation, make sure you have an internet connection</h2>'+
+				'<div style="text-align: center;">'+
+				'<a onclick="removeModal(\'dynamicModal\');" style="text-align:center; margin: 0px auto; width: 200px;"'+
+				'class="button small expand" id="errorBtn">Ok</a>'+
+				'</div>');
+			},
+			complete: function(){		
+				document.body.style.cursor = 'default';
+				//console.log(new Date().getTime() - start_time);
+			}
+		});
+	}
+	
+	validEntry = false;
+}
+
+function resetVariables(){
+	errorDiv = "";
+	email = "";
+	fname = "";
+	lname = "";
+	day = "";
+	month = "";
+	year = "";
+	gender = "";
+	DOB = "";
+}
+
+$(document).on('close', '[data-reveal]', function (e) {
+	if(e.target.id == "dynamicModal"){
+		resetVariables();
+		$('#clearBtn').parent().removeClass().addClass("large-2 medium-5 small-15 large-push-1 columns");
+		$('#clearBtn').parent().after('<div class = "large-3 medium-15 small-15 columns"><a onclick = "createUser();" style = "margin-top:12px;'+
+		' text-align:center;" class = "button small expand" id = "emailBtn">Add User</a></div>');
+		$('#dynamicModal').empty();
+	}
+});
+
+function removeModal(modal){
+	$('#'+modal).foundation('reveal', 'close');
+}
+
+// Function that dictates what to show when the user is trying to add a new restaurant
+// Last Editor: Jacob Gagne
+function changetype(){
+	var sel = document.getElementById('typeselection').value;
+	if(sel == 'old'){
+		$('#fnameDiv').hide();
+		$('#lnameDiv').hide();
+		$('#rpasswd').hide();
+		$('#passwd').hide();
+		$('#usern').hide();
+		$('#emailDiv').show();
+		document.getElementById("restn").className = "large-15 medium-15 small-15 columns";
+	}
+	else if(sel == 'new'){
+		$('#fnameDiv').show();
+		$('#lnameDiv').show();
+		$('#usern').show();
+		$('#rpasswd').show();
+		$('#passwd').show();
+		$('#emailDiv').show();
+		document.getElementById("restn").className = "large-5 medium-15 small-15 columns";
+		//$(document).foundation();
+	}
+	else{
+		$('#fnameDiv').hide();
+		$('#lnameDiv').hide();
+		$('#rpasswd').hide();
+		$('#passwd').hide();
+		$('#usern').hide();
+		$('#emailDiv').hide();
+		document.getElementById("restn").className = "large-15 medium-15 columns";
+	}
+}
+function searchByCode(){
+	var searchValue = $('#code').val();
+	document.body.style.cursor = 'wait';
+	$.ajax({
+		type: "POST",
+		cache: "false",
+		url:  pathToRoot+"srv/searchForCode.php",
+		data:{
+			code: searchValue
+		},
+		success: function(data){
+			if(data != 'error'){
+				$('#results').after(data);
+			}else{
+				$('#results').after(data);
+			}
+		},
+		error: function(data){
+		},
+		complete: function(){		
+			document.body.style.cursor = 'default';
+		}
+	});
 }
