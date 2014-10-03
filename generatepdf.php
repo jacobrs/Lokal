@@ -1,6 +1,6 @@
 <?php
 	session_start();
-	$pathToRoot = './'
+	$pathToRoot = './';
 	require($pathToRoot.'srv/fpdf.php');
 	require($pathToRoot.'srv/common.php');
 	require($pathToRoot.'srv/connect.php');

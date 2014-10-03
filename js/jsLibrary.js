@@ -352,3 +352,40 @@ function searchByCode(){
 		}
 	});
 }
+function clearEmailText(id){
+	document.getElementById(id).value = "";
+}
+function saveEmailText(){
+	if (!window.loading || window.loading == undefined){
+		window.loading = true;
+		$('#savebtn').html('Loading');
+		$.ajax({
+			type: "POST",
+			cache: "false",
+			url:  pathToRoot+"srv/smail.php",
+			data:{
+				msg: $('#message').val(),
+			},
+			dataType: 'json',
+			success: function(data){
+				if(data.error == ''){
+					$('#message').html(data);
+				}else{
+					alert("Something went wrong:\n"+data.error);
+					window.location = pathToRoot+"settings.php";
+				}
+			},
+			error: function(data){
+				console.log(data);
+			},
+			complete: function(){	
+				window.loading= false;	
+				$('#savebtn').html('Save');
+			}
+		});
+	}
+	return false;
+}
+function calculateLength(id){
+	document.getElementById('counter').innerHTML = document.getElementById(id).value.length + "&nbsp;Characters";
+}
