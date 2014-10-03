@@ -230,6 +230,17 @@ function generateDropDownRest($rests){
 	}
 }
 
+function getMessage($restid){
+	global $lokaldb;
+	$prep = $lokaldb->prepare('SELECT `Message` FROM `Restaurants` WHERE `RestID` = ?');
+	$prep->bind_param('i', $restid);
+	$prep->execute();
+	$prep->bind_result($desc);
+	$prep->fetch();
+	$prep->close();
+	return stripcslashes($desc);
+}
+
 function redneckSalt($input){
 	return 'RkL'.$input.'ARFs==';
 }

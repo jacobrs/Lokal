@@ -32,7 +32,7 @@
 					<div class = "large-15 small-15 medium-15 column">
 						<label style="color:#FFFFFF;">Email Message
 			        		<textarea id="message" autocomplete="off"
-			        		name="mesg" placeholder="Enter a message for your customers..."></textarea>
+			        		name="mesg" placeholder="Enter a message for your customers...">hello\\\ntest</textarea>
 			      		</label>
 					</div>
 				</div>
@@ -41,6 +41,8 @@
 						<a href="javascript:void(0);" style = "width:100%" onclick="saveEmailText();" 
 							class="button small" id="savebtn">Save</a>
 					</div>
+					<span id="returnMessage">
+					</span>
 					<div class = "large-4 small-15 column">
 						<p id = "counter">0&nbsp;Characters</p>
 					</div>
@@ -64,8 +66,11 @@
 			});
 
 			$(document).ready(function(){			
+				$('#message').val("<?php echo getMessage(unserialize($_SESSION['Restaurant'])->getId()); ?>");
+				$('#message').val($('#message').val().split('<br />').join('\n'))
+				calculateLength('message');
 				$('#message').on("keyup", function(e){
-					document.getElementById('counter').innerHTML = document.getElementById('message').value.length + "&nbsp;Characters";
+					calculateLength('message');
 				});
 			});
 		</script>

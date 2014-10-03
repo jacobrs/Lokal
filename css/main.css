@@ -186,5 +186,6 @@ footer{
 	max-width:100%;
 }
 #counter{
+	margin-top:.7em;
 	color:#2ecc71;
 }
