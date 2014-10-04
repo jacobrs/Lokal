@@ -45,7 +45,7 @@
 			    </div>
 				<div class="large-3 medium-2 small-15 columns" style="text-align:center; float:left;">
 					<a href="#" onclick="document.forms['login-form'].submit();" 
-						class="button small" style="height:38px; width:100%; margin-top:13px" id="loginBtn">Login</a>
+						class="button small" style="height:38px; width:100%; margin-top:13px; line-height: 10px;" id="loginBtn">Login</a>
 				</div>
 			</div>
 		</form>
