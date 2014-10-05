@@ -19,13 +19,17 @@
 					  <input type="text" id="code" name="code" placeholder="Search by code" autocomplete="off">
 					</div>
 					<div id="srchCodeBtn" class="large-2 large-pull-2 medium-2 medium-pull-2 small-2 small-pull-4 columns">
-					  <a onclick="searchByCode();" class="button postfix">Go</a>
+					  <a onclick="searchByCode();" class="button postfix" id="searchForCodeBtn">Go</a>
 					</div>
 				</div>
 			</div>
 			<br>
 		</div>
-		<div class = "row" id = "results">
+		<div class = "container" id = "results">
+			<div class="all-rounded center resultContainer" style="display: none" id="resultContainer">
+				<div class="centerInfo" id="resultInfo">
+				</div>
+			</div>
 		</div>
 <?php
 	// footer includes the database close

@@ -4,36 +4,56 @@
 	require($pathToRoot.'srv/common.php');
 	require($pathToRoot.'srv/connect.php');
 	global $lokaldb;
+	$lokaldb->select_db('lokal');
+	$result = array();
 	
 	if(isset($_POST['code']) && alive()){
 		$searchCode = $_POST['code'];
-		$sql = 'SELECT * FROM `Codes` WHERE `Code` = upper(\''.$searchCode.'\')';
-		$lokaldb->select_db('lokal');
+		$sql = 'SELECT `CustID`, `Exp` FROM `Codes` WHERE upper(`Code`) = upper(?)';
 		
-		$result = $lokaldb->query($sql);
-		$numrows = $result->num_rows;
-		if($numrows > 0){
-			if(($person = $result->fetch_assoc()) !== NULL){
-				$custId = $person['CustID'];
-				$expDate = $person['Exp'];
+		$code = $lokaldb->prepare($sql);
+		$code->bind_param('s', $searchCode);
+		
+		if($code->execute()){
+			$code->store_result();
+			$code->bind_result($custID, $Exp);
+			if($code->fetch()){
+				$custId = $custID;
+				$expDate = $Exp;
+
 				$sql = "SELECT `FirstName`, `LastName`
 						FROM `Customers`
-						WHERE `ID` = '".$custId."'";
+						WHERE `ID` = ?";
 				$customer = $lokaldb->query($sql);
-				if(($row = $customer->fetch_assoc()) !== NULL){
-					$data="<div id='SearchResult' class='row' style='text-align:center;'><div id='found' class='large-14 medium-14 small-14'><p>".$row['FirstName']." ".$row['LastName']." ".$expDate." </p></div></div>";
+				$customer = $lokaldb->prepare($sql);
+				$customer->prepare($sql);
+				$customer->bind_param('i', $custID);
+
+				if($customer->execute()){
+					
+					$customer->store_result();
+					$customer->bind_result($firstName, $lastName);
+					if($customer->fetch()){
+						$result['firstName'] = $firstName;
+						$result['lastName'] = $lastName;
+						$result['expDate'] = $expDate;
+						$result['codeUsed'] = $searchCode;
+					}else{
+						$result['error'] = "Not found";
+					}
 				}else{
-					$data="<div id='SearchResult' class='row' style='text-align:center;'><div id='notFound' class='large-14 medium-14 small-14'><p>Error 1</p></div></div>";
+					$result['error'] = "Customer does not exist with matching code, someone probably deleted him/her";
 				}
 			}else{
-				$data="<div id='SearchResult' class='row' style='text-align:center;'><div id='notFound' class='large-14 medium-14 small-14'><p>Error 2</p></div></div>";
+				$result['error'] = "Nobody with this code exists";
 			}
 		}else{
-			$data="<div id='SearchResult' class='row' style='text-align:center;'><div id='notFound' class='large-14 medium-14 small-14'><p>Nobody exists with this code</p></div></div>";
+			$result['error'] = "Something went wrong";
 		}
-		echo $data;
 	}else{
-		echo "<div id='SearchResult' class='row' style='text-align:center;'><div id='notFound' class='large-14 medium-14 small-14'><p>Error</p></div></div>";
+		$result['error'] = "This shouldn't happen";
 		exit;
 	}
+	echo json_encode($result);
+	die();
 ?>

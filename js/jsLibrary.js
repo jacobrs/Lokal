@@ -331,24 +331,62 @@ function changetype(){
 function searchByCode(){
 	var searchValue = $('#code').val();
 	document.body.style.cursor = 'wait';
+	$('#searchForCodeBtn').attr("onclick", "javascript:void(0)");
+	$('#searchForCodeBtn').empty();
+	$('#searchForCodeBtn').addClass("loadingGreen");
 	$.ajax({
 		type: "POST",
 		cache: "false",
 		url:  pathToRoot+"srv/searchForCode.php",
+		dataType: "json",
 		data:{
 			code: searchValue
 		},
 		success: function(data){
-			if(data != 'error'){
-				$('#results').after(data);
+			//console.log(data);
+			if($('.searchError').length > 0){
+				$('.searchError').fadeOut('slow', function(){
+					$('#resultInfo').empty();
+					if(data.error != undefined && data.error != ""){
+						$('#resultInfo').append("<div class='searchError' style='display: none'><p style='text-align: center'>"+data.error+"</p></div>");
+					}else{
+						var expDate = data.expDate;
+						expDate = expDate.substring(0, expDate.length - 8);
+						$('#resultInfo').append("<div class='searchError' style='top: 10%; display: none'><p style='text-align: center'><strong>Name:</strong> "+data.firstName+" "+data.lastName+
+							"</p><p style='text-align: center'><strong>Code of coupon:</strong> "+data.codeUsed+"</p>"+
+							"<p style='text-align: center'><strong>Expiry date: </strong>"+expDate+"</p>"+
+							"<div style='text-align: center;width: 87%;'><a class='deleteA' onclick='deleteCode(\""+data.codeUsed+"\")'><div id='mdiv'><p id='deleteText'>Delete</p><div class='mdiv'>"+
+							"<div class='md'></div></div></a></div></div>");
+					}
+					$('.searchError').fadeIn(500, function(){
+						// do stuff here
+					});
+				});
 			}else{
-				$('#results').after(data);
+				$('#resultInfo').empty();
+				if(data.error != undefined && data.error != ""){
+					$('#resultInfo').append("<div class='searchError'><p style='text-align: center'>"+data.error+"</p></div>");
+				}else{
+					var expDate = data.expDate;
+					expDate = expDate.substring(0, expDate.length - 8);
+					$('#resultInfo').append("<div class='searchError' style='top: 10%'><p style='text-align: center'><strong>Name:</strong> "+data.firstName+" "+data.lastName+
+						"</p><p style='text-align: center'><strong>Code of coupon:</strong> "+data.codeUsed+"</p>"+
+						"<p style='text-align: center'><strong>Expiry date: </strong>"+expDate+"</p>"+
+						"<div style='text-align: center;width: 87%;'><a class='deleteA' onclick='deleteCode(\""+data.codeUsed+"\")'><div id='mdiv'><p id='deleteText'>Delete</p><div class='mdiv'>"+
+						"<div class='md'></div></div></a></div></div>");
+				}
+				$('#resultContainer').fadeIn(500, function(){
+					
+				});
 			}
 		},
 		error: function(data){
 		},
 		complete: function(){		
 			document.body.style.cursor = 'default';
+			$('#searchForCodeBtn').attr("onclick", "searchByCode()");
+			$('#searchForCodeBtn').removeClass("loadingGreen");
+			$('#searchForCodeBtn').html("Go");
 		}
 	});
 }
@@ -388,4 +426,45 @@ function saveEmailText(){
 }
 function calculateLength(id){
 	document.getElementById('counter').innerHTML = document.getElementById(id).value.length + "&nbsp;Characters";
+}
+function clearInfo(){
+	$('#fname').val("");
+	$('#lname').val("");
+	$('#email').val("");
+	$('#restid').find('option:eq(0)').prop("selected", "selected");
+	$('#day').find('option:eq(0)').prop("selected", "selected");
+	$('#month').find('option:eq(0)').prop("selected", "selected");
+}
+function deleteCode(myCode){
+	$('.deleteA').attr("onclick", "javascript:void(0)");
+	$('.mdiv').remove();
+	$('#mdiv').addClass("loadingRed");
+
+	$.ajax({
+		type: "POST",
+		cache: "false",
+		url:  pathToRoot+"srv/deleteCode.php",
+		dataType: "json",
+		data:{
+			code: myCode
+		},
+		success: function(data){
+			if(data.error != undefined && data.error != ""){
+				$('#resultInfo').fadeOut(500, function(){
+					$(this).empty();
+					$('#resultInfo').append("<div class='searchError'><p style='text-align: center;'>Something went wrong, please refresh the page</p></div>");
+					$('#resultInfo').fadeIn(500);
+				});
+			}else{
+				$('#resultContainer').fadeOut(500, function(){
+						$('#resultInfo').empty();
+				});
+			}
+		},
+		error: function(data){
+		},
+		complete: function(){		
+			
+		}
+	});
 }

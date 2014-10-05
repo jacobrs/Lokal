@@ -4,72 +4,68 @@
 	$pathToRoot = './../';
 	require($pathToRoot.'srv/connect.php');
 	global $lokaldb;
+	$lokaldb->select_db("lokal");
 
-	$currdate = date('d');
-	$currmont = date('m');
-	if($currdate == '29' && $currmont = '02'){
-		$currdate = '28';
+	$mydate = new DateTime();
+	if($mydate->format('d') == '29' && $mydate->format('m') == '02' || $mydate->format('m') == '2'){
+		$mydate->sub(new DateInterval('P1D'));
 	}
-	$currdate = '2014-'.$currmont.'-'.$currdate;
+	$currdate = $mydate->format("Y-m-d");
+	$tmpDate = new DateTime($currdate);
+	$expDate = $tmpDate->add(new DateInterval('P70D'));
+	$expDate = $expDate->format('Y-m-d');
 
-	$sql = "SELECT `RestName`, c.*
+	$alreadyAdded = "SELECT *
+					 FROM `Codes` c
+					 INNER JOIN `Customers` r
+					 ON r.`ID` = c.`CustID`
+					 WHERE DATEDIFF(c.`Exp`, ?) > 11";
+	$alreadyAddedStat = $lokaldb->prepare($alreadyAdded);
+	$alreadyAddedStat->bind_param('s', $expDate);
+	if($alreadyAddedStat->execute()){
+		$alreadyAddedStat->store_result();
+		if($alreadyAddedStat->num_rows > 0){
+			die();
+		}
+	}
+
+
+	$sql = "SELECT r.`RestName`, c.`ID`
 			FROM `Customers` c
 			INNER JOIN `Restaurants` r
 			ON r.`RestID` = c.`RestID`
-			WHERE DAYOFYEAR(c.`DOB`) - DAYOFYEAR('".$currdate."') = 7 
-			AND ABS(datediff('".$currdate."' , c.`RegDate`)) > 7";
-	//var_dump($sql);
-	$birthday = $lokaldb->query($sql);	//get all customers with restaurant name
-	while(($row = $birthday->fetch_assoc()) !== NULL){
-		//echo $row['FirstName'].' '.$row['LastName'].' '.$row['DOB'].'<br>';
-		// **** generate random alphanumeric code ****
-		do{
-			$genCode="";
-			$codeRange = array_merge(range('A', 'Z'),range(0,9));
-			for($i = 0; $i < 16; $i++){
-				$genCode .= $codeRange[array_rand($codeRange, 1)];
-				shuffle($codeRange);
+			WHERE ABS(DAYOFYEAR(c.`DOB`) - DAYOFYEAR(?)) < 7";
+	$birthday = $lokaldb->prepare($sql);
+	$birthday->bind_param('s', $currdate);
+	if($birthday->execute()){
+		$birthday->store_result();
+		$birthday->bind_result($restName, $CustID);
+		while($birthday->fetch()){
+			// **** generate random alphanumeric code ****
+			do{
+				$genCode="";
+				$codeRange = array_merge(range('A', 'Z'),range(0,9));
+				for($i = 0; $i < 16; $i++){
+					$genCode .= $codeRange[array_rand($codeRange, 1)];
+					shuffle($codeRange);
+				}
+				$sql = "SELECT * FROM `Codes` WHERE `Code` = '".$genCode."'";
+				$result = $lokaldb->query($sql);
+				$numrows = $result->num_rows;
+			}while($numrows > 0);	// validate UNIQUE codes
+			$sql = "INSERT INTO `Codes`(`Code`, `CustID`, `Exp`) 
+					VALUES(?, ?, date_add('$currdate', INTERVAL 90 DAY))";
+			$lokaldb->select_db('lokal');
+			$result = $lokaldb->prepare($sql);
+			$result->bind_param('si', $genCode, $CustID);
+			if($result->execute()){
+			}else{
+				// this shouldn't happen
 			}
-			$sql = "SELECT * FROM `Codes` WHERE `Code` = '".$genCode."'";
-			$result = $lokaldb->query($sql);
-			$numrows = $result->num_rows;
-		}while($numrows > 0);	// validate UNIQUE codes
-		$sql = "INSERT INTO `Codes`(`Code`, `CustID`, `Exp`) 
-				VALUES('".$genCode."','".$row['CustID']."', date_add('$currdate', INTERVAL 90 DAY))";
-		$lokaldb->select_db('lokal');
-		$result = $lokaldb->query($sql);
-		if(!$result){
-			// wtf this shouldn't happen
 		}
+	}else{
+		// this shouldn't happen
 	}
 	
-	/*
-	$today = date("y-m-d");				//get today's date
-	
-	while (($row = $birthday->fetch_assoc()) !== NULL) {
-		$diff = date_diff($today, $row['DOB']);		//find the difference between today and customer's birthday
-		if ($diff <= 7) {   			// within 7 days? send email!	
-			$to = $row['Email'];
-			$subject = "'".$row['RestName']."' wishes you a happy birthday!"
-			$header = "From: '".$row['RestName']."'"
-			$message = "Bonjour '".$row['FirstName']."' '".$row['LastName']."',\r\n
-						Pour votre fête, nous vous offrons un repas gratuit comme cadeau!\r\n
-						S'il vous plaît imprimer et apporter le fichier PDF ci-joint pour votre prochaine sortie à '".$row['RestName']."''s.\r\n\r\n\r\n"
-						
-					   "Hello '".$row['FirstName']."' '".$row['LastName']."',\r\n					
-						For your birthday, we would like you to have a free meal on us!\r\n
-						Please print and bring the attached PDF to your next outing at '".$row['RestName']."''s.\r\n\r\n\r\n"
-			$sent = mail($to, $subject, $message, $header);
-			if($sent){
-				print "Your mail was sent successfully";
-			}
-			else{
-				print "ERROR: Couldn't send email.";
-			}
-		}
-	}*/
-	
 	$lokaldb->close();
-	
-	// $lokaldb->select_db('lokal');
 ?>
