@@ -329,66 +329,70 @@ function changetype(){
 	}
 }
 function searchByCode(){
-	var searchValue = $('#code').val();
-	document.body.style.cursor = 'wait';
-	$('#searchForCodeBtn').attr("onclick", "javascript:void(0)");
-	$('#searchForCodeBtn').empty();
-	$('#searchForCodeBtn').addClass("loadingGreen");
-	$.ajax({
-		type: "POST",
-		cache: "false",
-		url:  pathToRoot+"srv/searchForCode.php",
-		dataType: "json",
-		data:{
-			code: searchValue
-		},
-		success: function(data){
-			//console.log(data);
-			if($('.searchError').length > 0){
-				$('.searchError').fadeOut('slow', function(){
+	if(!window.searching || window.searching == undefined){
+		window.searching = true;
+		var searchValue = $('#code').val();
+		document.body.style.cursor = 'wait';
+		$('#searchForCodeBtn').attr("onclick", "javascript:void(0)");
+		$('#searchForCodeBtn').empty();
+		$('#searchForCodeBtn').addClass("loadingGreen");
+		$.ajax({
+			type: "POST",
+			cache: "false",
+			url:  pathToRoot+"srv/searchForCode.php",
+			dataType: "json",
+			data:{
+				code: searchValue
+			},
+			success: function(data){
+				//console.log(data);
+				if($('.searchError').length > 0){
+					$('.searchError').fadeOut('slow', function(){
+						$('#resultInfo').empty();
+						if(data.error != undefined && data.error != ""){
+							$('#resultInfo').append("<div class='searchError' style='display: none'><p style='text-align: center'>"+data.error+"</p></div>");
+						}else{
+							var expDate = data.expDate;
+							expDate = expDate.substring(0, expDate.length - 8);
+							$('#resultInfo').append("<div class='searchError' style='top: 10%; display: none'><p style='text-align: center'><strong>Name:</strong> "+data.firstName+" "+data.lastName+
+								"</p><p style='text-align: center'><strong>Code of coupon:</strong> "+data.codeUsed+"</p>"+
+								"<p style='text-align: center'><strong>Expiry date: </strong>"+expDate+"</p>"+
+								"<div style='text-align: center;width: 87%;'><a class='deleteA' onclick='deleteCode(\""+data.codeUsed+"\")'><div id='mdiv'><p id='deleteText'>Delete</p><div class='mdiv'>"+
+								"<div class='md'></div></div></a></div></div>");
+						}
+						$('.searchError').fadeIn(500, function(){
+							// do stuff here
+						});
+					});
+				}else{
 					$('#resultInfo').empty();
 					if(data.error != undefined && data.error != ""){
-						$('#resultInfo').append("<div class='searchError' style='display: none'><p style='text-align: center'>"+data.error+"</p></div>");
+						$('#resultInfo').append("<div class='searchError'><p style='text-align: center'>"+data.error+"</p></div>");
 					}else{
 						var expDate = data.expDate;
 						expDate = expDate.substring(0, expDate.length - 8);
-						$('#resultInfo').append("<div class='searchError' style='top: 10%; display: none'><p style='text-align: center'><strong>Name:</strong> "+data.firstName+" "+data.lastName+
+						$('#resultInfo').append("<div class='searchError' style='top: 10%'><p style='text-align: center'><strong>Name:</strong> "+data.firstName+" "+data.lastName+
 							"</p><p style='text-align: center'><strong>Code of coupon:</strong> "+data.codeUsed+"</p>"+
 							"<p style='text-align: center'><strong>Expiry date: </strong>"+expDate+"</p>"+
 							"<div style='text-align: center;width: 87%;'><a class='deleteA' onclick='deleteCode(\""+data.codeUsed+"\")'><div id='mdiv'><p id='deleteText'>Delete</p><div class='mdiv'>"+
 							"<div class='md'></div></div></a></div></div>");
 					}
-					$('.searchError').fadeIn(500, function(){
-						// do stuff here
+					$('#resultContainer').fadeIn(500, function(){
+						
 					});
-				});
-			}else{
-				$('#resultInfo').empty();
-				if(data.error != undefined && data.error != ""){
-					$('#resultInfo').append("<div class='searchError'><p style='text-align: center'>"+data.error+"</p></div>");
-				}else{
-					var expDate = data.expDate;
-					expDate = expDate.substring(0, expDate.length - 8);
-					$('#resultInfo').append("<div class='searchError' style='top: 10%'><p style='text-align: center'><strong>Name:</strong> "+data.firstName+" "+data.lastName+
-						"</p><p style='text-align: center'><strong>Code of coupon:</strong> "+data.codeUsed+"</p>"+
-						"<p style='text-align: center'><strong>Expiry date: </strong>"+expDate+"</p>"+
-						"<div style='text-align: center;width: 87%;'><a class='deleteA' onclick='deleteCode(\""+data.codeUsed+"\")'><div id='mdiv'><p id='deleteText'>Delete</p><div class='mdiv'>"+
-						"<div class='md'></div></div></a></div></div>");
 				}
-				$('#resultContainer').fadeIn(500, function(){
-					
-				});
+			},
+			error: function(data){
+			},
+			complete: function(){		
+				document.body.style.cursor = 'default';
+				$('#searchForCodeBtn').attr("onclick", "searchByCode()");
+				$('#searchForCodeBtn').removeClass("loadingGreen");
+				$('#searchForCodeBtn').html("Go");
+				window.searching = false;
 			}
-		},
-		error: function(data){
-		},
-		complete: function(){		
-			document.body.style.cursor = 'default';
-			$('#searchForCodeBtn').attr("onclick", "searchByCode()");
-			$('#searchForCodeBtn').removeClass("loadingGreen");
-			$('#searchForCodeBtn').html("Go");
-		}
-	});
+		});
+	}
 }
 function clearEmailText(id){
 	document.getElementById(id).value = "";
@@ -465,6 +469,15 @@ function deleteCode(myCode){
 		},
 		complete: function(){		
 			
+		}
+	});
+}
+
+window.onload = function(){
+	$('#code').on("keyup", function(e){
+		var keycode = e.which || e.keyCode;
+		if(keycode == 13){
+			searchByCode();
 		}
 	});
 }
