@@ -5,6 +5,8 @@ global $emailregex;
 $emailregex = "/^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\\.[a-zA-Z0-9-.]+$/";
 global $nameregex;
 $nameregex = "~[a-zA-Z0-9àáâäãåaceèéêëìíîïlnòóôöõøùúûüÿýzzñçcšžÀÁÂÄÃÅACEÈÉÊËÌÍÎÏLNÒÓÔÖÕØÙÚÛÜŸÝZZÑßÇŒÆCŠŽ?ð ,.\-/]+~";
+global $codeRegex;
+$codeRegex = "/[^a-zA-Z0-9]/";
 
 class user{
 	private $username;

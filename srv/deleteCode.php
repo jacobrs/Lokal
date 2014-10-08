@@ -6,9 +6,9 @@
 	global $lokaldb;
 	$lokaldb->select_db('lokal');
 	$result = array();
-	
+	global $codeRegex;
 	if(isset($_POST['code']) && alive()){
-		$searchCode = $_POST['code'];
+		$searchCode = preg_replace($codeRegex, '', $_POST['code']);
 		$sql = 'DELETE FROM `Codes` WHERE upper(`Code`) = upper(?)';
 		
 		$code = $lokaldb->prepare($sql);
